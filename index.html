@@ -3,61 +3,210 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ludo King Room</title>
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #101827;
-  color: white;
-  text-align: center;
-}
-header {
-  background: #16a34a;
-  padding: 22px 10px;
-  font-size: 27px;
-  font-weight: bold;
-}
-.container { padding: 20px; }
-.card {
-  background: #1e293b;
-  border-radius: 15px;
-  padding: 20px;
-  margin: 18px auto;
-  max-width: 380px;
-}
-button {
-  background: #22c55e;
-  color: #06210e;
-  border: 0;
-  border-radius: 9px;
-  padding: 13px 20px;
-  margin: 6px;
-  font-size: 16px;
-  font-weight: bold;
-}
-.note { color: #cbd5e1; line-height: 1.6; }
+*{box-sizing:border-box}
+body{margin:0;background:#101827;color:white;font-family:Arial,sans-serif;text-align:center}
+header{background:#16a34a;padding:18px 8px;font-size:25px;font-weight:bold}
+main{max-width:520px;margin:auto;padding:15px}
+.card{background:#202c40;padding:18px;border-radius:16px;margin:14px 0}
+button,input,select{font-size:16px;padding:12px;border-radius:9px;border:0}
+button{background:#22c55e;color:#062e18;font-weight:bold;cursor:pointer;margin:5px}
+button:disabled{opacity:.4}
+input,select{max-width:100%;background:white;color:#111}
+.small{font-size:13px;color:#cbd5e1;line-height:1.6}
+.hidden{display:none!important}
+#board{display:grid;grid-template-columns:repeat(11,1fr);gap:2px;margin:14px auto;max-width:420px;aspect-ratio:1}
+.cell{background:#e5e7eb;color:#111;border-radius:4px;display:flex;align-items:center;justify-content:center;min-width:0;aspect-ratio:1;font-size:clamp(10px,2.8vw,16px);font-weight:bold}
+.track{background:#fff7d6}
+.red{background:#ef4444;color:white}
+.blue{background:#3b82f6;color:white}
+.green{background:#22c55e;color:#052e16}
+.yellow{background:#facc15;color:#422006}
+.home{background:#334155;color:#fff}
+#dice{font-size:52px;margin:8px}
+.tokenlist{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
+.tokenlist button{font-size:14px;margin:2px}
 </style>
 </head>
 <body>
 <header>🎲 LUDO KING ROOM</header>
-<div class="container">
-  <div class="card">
-    <h2>खेल की दुनिया में आपका स्वागत है!</h2>
-    <p class="note">अपना गेम रूम चुनें और दोस्तों के साथ खेलें।</p>
-    <button onclick="alert('गेम रूम जल्द उपलब्ध होगा!')">
-      गेम रूम
-    </button>
-  </div>
-  <div class="card">
-    <h2>💰 वॉलेट डेमो</h2>
-    <p>डेमो बैलेंस: ₹100</p>
-    <p class="note">यह केवल डेमो है। असली पैसे जमा करने या निकालने की सुविधा नहीं है।</p>
-    <button onclick="alert('यह डेमो वेबसाइट है।')">
-      आगे बढ़ें
-    </button>
-  </div>
-</div>
+<main>
+<section class="card" id="welcome">
+<h2>खेल की दुनिया में आपका स्वागत है!</h2>
+<p>अपना रूम बनाएँ और लूडो खेलें।</p>
+<button onclick="createRoom()">🏠 रूम बनाएँ</button>
+<hr>
+<p>रूम कोड डालकर जुड़ें</p>
+<input id="joinCode" placeholder="रूम कोड" maxlength="6">
+<button onclick="joinRoom()">रूम जॉइन करें</button>
+<p class="small">यह अभी एक लोकल डेमो है। दूसरे मोबाइल से जुड़ने के लिए ऑनलाइन सर्वर चाहिए।</p>
+</section>
+
+<section class="card hidden" id="setup">
+<h2>गेम सेटिंग</h2>
+<label>खिलाड़ियों की संख्या</label><br>
+<select id="playerCount">
+<option value="2">2 खिलाड़ी</option>
+<option value="3">3 खिलाड़ी</option>
+<option value="4" selected>4 खिलाड़ी</option>
+</select><br>
+<button onclick="startGame()">गेम शुरू करें</button>
+<button onclick="goHome()">वापस</button>
+</section>
+
+<section class="card hidden" id="game">
+<h2 id="roomTitle">लूडो गेम</h2>
+<p id="turnText">खिलाड़ी की बारी</p>
+<div id="dice">🎲</div>
+<button id="rollBtn" onclick="rollDice()">पासा फेंकें</button>
+<p id="message">पासा फेंककर खेल शुरू करें।</p>
+<div id="board"></div>
+<h3>अपनी गोटी चुनें</h3>
+<div id="tokens" class="tokenlist"></div>
+<p class="small">नियम: गोटी घर से निकालने के लिए 6 चाहिए। अपनी बारी में गोटी चुनें। यह शुरुआती डेमो है, आधिकारिक लूडो नियमों का पूरा संस्करण नहीं।</p>
+<button onclick="newGame()">नया गेम</button>
+<button onclick="goHome()">मुख्य पेज</button>
+</section>
+
+<section class="card">
+<h3>💰 डेमो वॉलेट</h3>
+<p>डेमो बैलेंस: ₹100</p>
+<p class="small">यह केवल डेमो है। असली पैसे जमा करने या निकालने की सुविधा नहीं है।</p>
+</section>
+</main>
+<script>
+const names=["लाल","नीला","हरा","पीला"];
+const colors=["red","blue","green","yellow"];
+let room="",players=2,turn=0,dice=0,waiting=false;
+let pieces=[],path=[],cells=[];
+
+function createRoom(){
+ room=String(Math.floor(1000+Math.random()*9000));
+ document.getElementById("joinCode").value=room;
+ document.getElementById("welcome").classList.add("hidden");
+ document.getElementById("setup").classList.remove("hidden");
+ alert("आपका डेमो रूम कोड: "+room);
+}
+function joinRoom(){
+ const code=document.getElementById("joinCode").value.trim();
+ if(!code){alert("पहले रूम कोड डालें।");return;}
+ room=code;
+ document.getElementById("welcome").classList.add("hidden");
+ document.getElementById("setup").classList.remove("hidden");
+ alert("डेमो रूम खुल गया। यह कोड दूसरे मोबाइल से ऑनलाइन कनेक्शन नहीं बनाता।");
+}
+function goHome(){
+ document.getElementById("game").classList.add("hidden");
+ document.getElementById("setup").classList.add("hidden");
+ document.getElementById("welcome").classList.remove("hidden");
+}
+function newGame(){
+ document.getElementById("game").classList.add("hidden");
+ document.getElementById("setup").classList.remove("hidden");
+}
+function startGame(){
+ players=Number(document.getElementById("playerCount").value);
+ turn=0;dice=0;waiting=false;
+ pieces=Array.from({length:players},()=>[-1,-1,-1,-1]);
+ document.getElementById("setup").classList.add("hidden");
+ document.getElementById("game").classList.remove("hidden");
+ document.getElementById("roomTitle").textContent="🎲 रूम: "+(room||"डेमो");
+ buildPath();render();
+}
+function buildPath(){
+ const coords=[];
+ for(let c=0;c<11;c++)coords.push([0,c]);
+ for(let r=1;r<11;r++)coords.push([r,10]);
+ for(let c=9;c>=0;c--)coords.push([10,c]);
+ for(let r=9;r>=1;r--)coords.push([r,0]);
+ path=coords;
+ const board=document.getElementById("board");
+ board.innerHTML="";
+ cells=Array(path.length);
+ const lookup={};
+ path.forEach((p,i)=>lookup[p.join(",")]=i);
+ for(let r=0;r<11;r++){
+  for(let c=0;c<11;c++){
+   const el=document.createElement("div");
+   const idx=lookup[r+","+c];
+   el.className="cell";
+   if(idx!==undefined){el.classList.add("track");cells[idx]=el;}
+   else if(r>=4&&r<=6&&c>=4&&c<=6){
+    el.classList.add("home");el.textContent=(r===5&&c===5)?"🏆":"";
+   }else{
+    const zone=(r<4&&c<4)?0:(r<4&&c>6)?1:(r>6&&c>6)?2:3;
+    el.classList.add(colors[zone]);
+    el.style.opacity=".85";
+    el.textContent=(r===1||r===9)&&(c===1||c===9)?"🏠":"";
+   }
+   board.appendChild(el);
+  }
+ }
+}
+function rollDice(){
+ if(waiting)return;
+ dice=Math.floor(Math.random()*6)+1;
+ document.getElementById("dice").textContent=["","⚀","⚁","⚂","⚃","⚄","⚅"][dice];
+ waiting=true;
+ document.getElementById("message").textContent=
+ names[turn]+" खिलाड़ी: "+dice+" आया। अब अपनी गोटी चुनें।";
+ renderTokens();
+}
+function choosePiece(index){
+ if(!waiting)return;
+ let pos=pieces[turn][index];
+ if(pos===-1&&dice!==6){
+  document.getElementById("message").textContent="गोटी घर से निकालने के लिए 6 चाहिए।";
+  return;
+ }
+ if(pos===-1)pieces[turn][index]=0;
+ else pieces[turn][index]=pos+dice;
+ if(pieces[turn][index]>=40){
+  pieces[turn][index]=40;
+  document.getElementById("message").textContent=names[turn]+" की गोटी फिनिश पर पहुँच गई!";
+ }else{
+  document.getElementById("message").textContent=names[turn]+" ने गोटी चला दी।";
+ }
+ waiting=false;
+ if(dice!==6)turn=(turn+1)%players;
+ render();
+}
+function renderTokens(){
+ const box=document.getElementById("tokens");
+ box.innerHTML="";
+ for(let i=0;i<4;i++){
+  const b=document.createElement("button");
+  b.textContent="गोटी "+(i+1)+" ("+(pieces[turn][i]===-1?"घर":pieces[turn][i]===40?"फिनिश":pieces[turn][i])+")";
+  b.className=colors[turn];
+  b.disabled=!waiting;
+  b.onclick=()=>choosePiece(i);
+  box.appendChild(b);
+ }
+}
+function render(){
+ document.getElementById("turnText").textContent=
+ "अब "+names[turn]+" खिलाड़ी की बारी";
+ document.getElementById("rollBtn").disabled=waiting;
+ cells.forEach(el=>{if(el)el.textContent="";});
+ path.forEach((p,i)=>{
+  const el=cells[i];
+  if(!el)return;
+  const occupants=[];
+  for(let pl=0;pl<players;pl++){
+   for(let t=0;t<4;t++){
+    if(pieces[pl][t]===i&&i!==40)occupants.push(colors[pl]);
+   }
+  }
+  if(occupants.length){
+   el.textContent="●";
+   el.style.color=occupants.length>1?"#111":
+    ({red:"#ef4444",blue:"#2563eb",green:"#15803d",yellow:"#a16207"}[occupants[0]]);
+  }
+ });
+ renderTokens();
+}
+</script>
 </body>
 </html>

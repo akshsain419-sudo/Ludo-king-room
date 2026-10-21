@@ -1,1017 +1,452 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Akplayers - Play & Earn</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts: Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              red: '#e53e3e',
-              dark: '#1a1d24',
-              purple: '#5b21b6',
-              green: '#16a34a',
-              amber: '#d97706'
-            }
-          }
-        }
-      }
-    }
-  </script>
-
-  <style>
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 5px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 4px;
-    }
-
-    /* Marquee Animation */
-    .marquee-container {
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    .marquee-content {
-      display: inline-block;
-      animation: marquee 18s linear infinite;
-    }
-    @keyframes marquee {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-
-    /* Gradient Logo Icon Background */
-    .logo-flame {
-      background: linear-gradient(135deg, #ff416c, #ff4b2b);
-    }
-    
-    .vs-badge {
-      background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-    }
-
-    /* Pulse animation for live badge */
-    .pulse-glow {
-      box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-      70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akplayers - Gaming Platform</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Poppins', sans-serif; background-color: #f1f5f9; }
+        .app-gradient { background: linear-gradient(135deg, #ff416c, #ff4b2b); }
+    </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex justify-center items-start">
+<body class="bg-slate-100 text-slate-800 antialiased">
 
-  <!-- Mobile Frame Container for Desktop View (Responsive Mobile Canvas) -->
-  <div class="w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col pb-12 overflow-hidden border-x border-slate-200">
-
-    <!-- Top Announcement Marquee Banner -->
-    <div class="bg-rose-600 text-white text-xs font-semibold py-1.5 px-3 flex items-center shadow-sm z-30">
-      <div class="marquee-container w-full">
-        <div class="marquee-content">
-          Commission: 5% • Referral: 2% For All Games 😍 &nbsp;&nbsp;&nbsp;&nbsp; Instant Withdrawal 24/7 🚀 &nbsp;&nbsp;&nbsp;&nbsp; Fair Play Guaranteed 🎯
-        </div>
-      </div>
+    <!-- Top Banner -->
+    <div class="bg-rose-600 text-white text-xs py-2 px-3 text-center font-medium flex items-center justify-between shadow-sm">
+        <span>😍 Commission: 5% • Referral: 2% For All Games</span>
+        <button onclick="switchTab('admin')" class="bg-white text-rose-600 px-2 py-0.5 rounded font-bold uppercase text-[10px]">Admin Panel</button>
     </div>
 
-    <!-- Header Navigation -->
-    <header class="bg-white border-b border-slate-200 px-4 py-2.5 flex items-center justify-between sticky top-0 z-20 shadow-sm">
-      <div class="flex items-center gap-3">
-        <!-- Hamburger Menu Toggle -->
-        <button id="hamburgerBtn" onclick="toggleSidebar(true)" class="text-slate-700 hover:text-slate-900 text-2xl focus:outline-none">
-          <i class="fa-solid fa-bars"></i>
-        </button>
-        
-        <!-- Brand Logo -->
-        <div onclick="navigateTo('home')" class="flex items-center gap-2 cursor-pointer select-none">
-          <div class="w-10 h-10 rounded-full logo-flame flex items-center justify-center text-white shadow-md">
-            <i class="fa-solid fa-gamepad text-xl"></i>
-          </div>
-          <span class="font-extrabold text-xl text-slate-900 tracking-tight flex flex-col leading-tight">
-            <span>AKPLAYERS</span>
-          </span>
-        </div>
-      </div>
+    <!-- Header -->
+    <header class="bg-white sticky top-0 z-45 shadow-sm border-b border-slate-100">
+        <div class="max-w-md mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <button onclick="toggleSidebar()" class="text-slate-700 text-xl focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="flex items-center gap-2 cursor-pointer" onclick="switchTab('games')">
+                    <div class="w-9 h-9 rounded-full app-gradient flex items-center justify-center text-white shadow">
+                        <i class="fa-solid fa-gamepad text-base"></i>
+                    </div>
+                    <span class="font-extrabold text-lg bg-gradient-to-r from-rose-600 to-orange-500 bg-clip-text text-transparent">Akplayers</span>
+                </div>
+            </div>
 
-      <!-- Action Buttons (Download & Wallet) -->
-      <div class="flex items-center gap-2.5">
-        <!-- App Download Icon -->
-        <button onclick="downloadApp()" class="border-2 border-emerald-500 text-emerald-600 rounded-lg p-1.5 hover:bg-emerald-50 transition" title="Download App">
-          <i class="fa-solid fa-download text-base"></i>
-        </button>
-
-        <!-- Wallet Balance Chip -->
-        <div onclick="navigateTo('wallet')" class="flex items-center bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-sm cursor-pointer hover:bg-emerald-600 transition gap-1.5 text-sm">
-          <i class="fa-solid fa-wallet text-xs"></i>
-          <span id="headerBalance">5</span>
+            <div class="flex items-center gap-2">
+                <button onclick="alert('Download APK feature active')" class="bg-emerald-50 text-emerald-600 border border-emerald-200 p-2 rounded-xl text-xs font-semibold">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+                <div onclick="switchTab('wallet')" class="bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-wallet text-amber-500"></i>
+                    <span id="header-chips" class="font-bold text-sm">5</span>
+                </div>
+            </div>
         </div>
-      </div>
     </header>
 
-    <!-- Main Content Dynamic Container -->
-    <main id="mainContainer" class="flex-1 p-3.5 overflow-y-auto">
+    <!-- Notice -->
+    <div class="max-w-md mx-auto px-4 mt-3">
+        <div class="bg-amber-50 border-l-4 border-amber-400 p-2.5 rounded-r-xl text-xs text-amber-900 flex items-start gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5"></i>
+            <p><strong>Notice:</strong> सभी प्लेयर्स live Chat पर मैसेज करे whatsApp पर कोई मैसेज ना करे</p>
+        </div>
+    </div>
 
-      <!-- View 1: HOME / GAMES SCREEN -->
-      <section id="homeView" class="space-y-4">
+    <!-- Main Content Container -->
+    <main class="max-w-md mx-auto px-4 py-4 mb-24" id="main-container">
         
-        <!-- Hindi Live Notice Alert Banner -->
-        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 shadow-sm flex items-start gap-2.5">
-          <div class="text-amber-600 text-xl flex-shrink-0 mt-0.5">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-          </div>
-          <div class="text-amber-900 text-sm font-semibold leading-snug">
-            Notice:-सभी प्लेयर्स live Chat पर मैसेज करे watshapp पर कोई मैसेज ना करे
-          </div>
-        </div>
-
-        <!-- Games Section Header & Rules Button -->
-        <div class="flex items-center justify-between pt-1">
-          <h2 class="text-2xl font-black text-slate-800 tracking-tight">Games</h2>
-          <button onclick="openModal('rulesModal')" class="border border-slate-400 text-slate-700 hover:bg-slate-100 font-medium px-3 py-1 rounded-lg text-sm flex items-center gap-1.5 shadow-sm transition">
-            <i class="fa-circle-info text-slate-500"></i> Rules
-          </button>
-        </div>
-
-        <!-- Games Grid (2x2 Display) -->
-        <div class="grid grid-cols-2 gap-3.5">
-          
-          <!-- Card 1: Ludo Classic -->
-          <div onclick="navigateTo('battles')" class="relative bg-gradient-to-br from-indigo-500 via-blue-600 to-cyan-500 rounded-2xl p-0.5 shadow-lg overflow-hidden group cursor-pointer transform active:scale-95 transition">
-            <div class="bg-gradient-to-b from-cyan-400 to-blue-700 rounded-[14px] p-3 text-white h-44 flex flex-col justify-between relative overflow-hidden">
-              <div class="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
-              
-              <!-- Game Title Graphic Header -->
-              <div class="z-10 text-center">
-                <div class="inline-block bg-sky-900/80 border border-amber-300 text-amber-300 font-extrabold text-xs px-2.5 py-0.5 rounded-md uppercase shadow">
-                  LUDO CLASSIC
-                </div>
-              </div>
-
-              <!-- Center Graphic Visual -->
-              <div class="flex justify-center items-center my-auto z-10 relative">
-                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-xl border border-white/40 flex items-center justify-center text-3xl shadow-inner">
-                  🎲
-                </div>
-                <div class="absolute -bottom-1 font-bold text-[10px] bg-red-600 px-2 py-0.5 rounded-full uppercase tracking-wider text-white shadow">
-                  Classic Arena
-                </div>
-              </div>
-
-              <!-- Card Footer Badges -->
-              <div class="flex justify-between items-end text-[11px] font-bold z-10">
-                <span class="bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded-md text-slate-100 border border-white/20">
-                  2 PLAYERS
-                </span>
-                <span class="bg-emerald-600 text-white px-2 py-0.5 rounded-md shadow border border-emerald-400">
-                  ₹50 - ₹10000
-                </span>
-              </div>
+        <!-- 1. GAMES TAB -->
+        <div id="tab-games" class="space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-base font-bold text-slate-800">Games</h2>
+                <button onclick="alert('1. Record gameplay video.\n2. Upload valid screenshot.')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-600">
+                    <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Rules
+                </button>
             </div>
-          </div>
 
-          <!-- Card 2: Snake & Ladders -->
-          <div onclick="showToast('Snake & Ladders starting soon!')" class="relative bg-gradient-to-br from-amber-400 via-orange-500 to-red-500 rounded-2xl p-0.5 shadow-lg overflow-hidden group cursor-pointer transform active:scale-95 transition">
-            <div class="bg-gradient-to-b from-amber-300 to-emerald-700 rounded-[14px] p-3 text-white h-44 flex flex-col justify-between relative overflow-hidden">
-              
-              <!-- NEW Badge -->
-              <div class="absolute top-0 left-0 bg-amber-400 text-slate-900 font-black text-[10px] px-3 py-1 rounded-br-lg shadow uppercase tracking-wider z-20">
-                NEW
-              </div>
-
-              <!-- Graphic Header -->
-              <div class="z-10 text-center mt-3">
-                <div class="font-extrabold text-sm text-amber-200 drop-shadow-md uppercase tracking-tight">
-                  Snake & Ladders
+            <div class="grid grid-cols-2 gap-3">
+                <div onclick="openBattles('Ludo Classic')" class="relative rounded-2xl overflow-hidden shadow cursor-pointer bg-gradient-to-br from-blue-600 to-indigo-800 p-3 text-white">
+                    <div class="absolute top-2 right-2 bg-amber-400 text-slate-900 text-[9px] font-bold px-2 py-0.5 rounded-full">Classic</div>
+                    <div class="py-3 text-center">
+                        <i class="fa-solid fa-dice text-3xl mb-2 text-amber-300"></i>
+                        <h3 class="font-bold text-sm">LUDO CLASSIC</h3>
+                        <p class="text-[10px] text-blue-100 mt-1">₹50 - ₹10,000</p>
+                    </div>
                 </div>
-              </div>
 
-              <!-- Center Graphic Visual -->
-              <div class="flex justify-center items-center my-auto z-10">
-                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-xl border border-white/40 flex items-center justify-center text-3xl shadow-inner">
-                  🐍
+                <div onclick="openBattles('Snake & Ladders')" class="relative rounded-2xl overflow-hidden shadow cursor-pointer bg-gradient-to-br from-emerald-600 to-teal-800 p-3 text-white">
+                    <div class="absolute top-2 right-2 bg-amber-400 text-slate-900 text-[9px] font-bold px-2 py-0.5 rounded-full">NEW</div>
+                    <div class="py-3 text-center">
+                        <i class="fa-solid fa-chess-board text-3xl mb-2 text-amber-300"></i>
+                        <h3 class="font-bold text-sm">SNAKE & LADDERS</h3>
+                        <p class="text-[10px] text-emerald-100 mt-1">₹50 - ₹5,000</p>
+                    </div>
                 </div>
-              </div>
 
-              <!-- Footer Badge -->
-              <div class="text-center z-10">
-                <span class="bg-black/60 backdrop-blur-sm px-2.5 py-0.5 rounded-md text-[11px] font-semibold text-slate-100 border border-white/20">
-                  Quick Battles
-                </span>
-              </div>
+                <div onclick="openBattles('Rummy')" class="relative rounded-2xl overflow-hidden shadow cursor-pointer bg-gradient-to-br from-red-600 to-rose-800 p-3 text-white">
+                    <div class="absolute top-2 right-2 bg-amber-400 text-slate-900 text-[9px] font-bold px-2 py-0.5 rounded-full">NEW</div>
+                    <div class="py-3 text-center">
+                        <i class="fa-solid fa-clone text-3xl mb-2 text-amber-300"></i>
+                        <h3 class="font-bold text-sm">RUMMY</h3>
+                        <p class="text-[10px] text-red-100 mt-1">₹100 - ₹10,000</p>
+                    </div>
+                </div>
+
+                <div onclick="openBattles('Call Break')" class="relative rounded-2xl overflow-hidden shadow cursor-pointer bg-gradient-to-br from-purple-600 to-indigo-900 p-3 text-white">
+                    <div class="absolute top-2 right-2 bg-amber-400 text-slate-900 text-[9px] font-bold px-2 py-0.5 rounded-full">AI Support</div>
+                    <div class="py-3 text-center">
+                        <i class="fa-solid fa-layer-group text-3xl mb-2 text-amber-300"></i>
+                        <h3 class="font-bold text-sm">CALL BREAK</h3>
+                        <p class="text-[10px] text-purple-100 mt-1">₹50 - ₹5,000</p>
+                    </div>
+                </div>
             </div>
-          </div>
+        </div>
 
-          <!-- Card 3: Rummy -->
-          <div onclick="showToast('Rummy table joining...')" class="relative bg-gradient-to-br from-emerald-400 via-teal-600 to-cyan-700 rounded-2xl p-0.5 shadow-lg overflow-hidden group cursor-pointer transform active:scale-95 transition">
-            <div class="bg-gradient-to-b from-emerald-500 to-green-800 rounded-[14px] p-3 text-white h-44 flex flex-col justify-between relative overflow-hidden">
-              
-              <!-- NEW Badge -->
-              <div class="absolute top-0 left-0 bg-amber-400 text-slate-900 font-black text-[10px] px-3 py-1 rounded-br-lg shadow uppercase tracking-wider z-20">
-                NEW
-              </div>
-
-              <!-- Graphic Header -->
-              <div class="z-10 text-center mt-3">
-                <div class="font-extrabold text-base text-amber-300 tracking-wide uppercase">
-                  RUMMY
-                </div>
-              </div>
-
-              <!-- Cards Graphic Visual -->
-              <div class="flex justify-center items-center my-auto z-10">
-                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-xl border border-white/40 flex items-center justify-center text-3xl shadow-inner">
-                  🃏
-                </div>
-              </div>
-
-              <!-- Footer Badge -->
-              <div class="text-center z-10">
-                <span class="bg-black/60 backdrop-blur-sm px-2.5 py-0.5 rounded-md text-[11px] font-semibold text-slate-100 border border-white/20">
-                  Point & Pool
-                </span>
-              </div>
+        <!-- 2. BATTLES TAB -->
+        <div id="tab-battles" class="hidden space-y-4">
+            <div class="flex items-center justify-between">
+                <button onclick="switchTab('games')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-600">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Back
+                </button>
+                <h2 id="battle-game-title" class="text-sm font-bold text-slate-800">Open Battles</h2>
+                <button onclick="openModal('create-battle-modal')" class="bg-rose-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow">
+                    + Create
+                </button>
             </div>
-          </div>
 
-          <!-- Card 4: Call Break -->
-          <div onclick="showToast('Call Break Lobby Ready')" class="relative bg-gradient-to-br from-purple-500 via-indigo-600 to-blue-800 rounded-2xl p-0.5 shadow-lg overflow-hidden group cursor-pointer transform active:scale-95 transition">
-            <div class="bg-gradient-to-b from-purple-800 to-indigo-950 rounded-[14px] p-3 text-white h-44 flex flex-col justify-between relative overflow-hidden">
-              
-              <!-- NEW Badge -->
-              <div class="absolute top-0 left-0 bg-amber-400 text-slate-900 font-black text-[10px] px-3 py-1 rounded-br-lg shadow uppercase tracking-wider z-20">
-                NEW
-              </div>
-
-              <!-- Graphic Header -->
-              <div class="z-10 text-center mt-3">
-                <div class="font-extrabold text-base text-purple-200 tracking-wide uppercase">
-                  CALL BREAK
-                </div>
-              </div>
-
-              <!-- Graphic Visual -->
-              <div class="flex justify-center items-center my-auto z-10">
-                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-xl border border-white/40 flex items-center justify-center text-3xl shadow-inner">
-                  ♠️
-                </div>
-              </div>
-
-              <!-- Bottom AI Badge -->
-              <div class="text-center z-10">
-                <span class="bg-slate-900/90 text-amber-300 px-2 py-0.5 rounded-md text-[10px] font-bold border border-amber-400/40 flex items-center justify-center gap-1">
-                  ✨ 24/7 AI Support
-                </span>
-              </div>
+            <div class="bg-white p-3 rounded-xl border border-slate-200 flex gap-2">
+                <input type="number" id="battle-amount-input" placeholder="Amount (e.g. 50)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-rose-500">
+                <button onclick="createCustomBattle()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-semibold">Set</button>
             </div>
-          </div>
 
-        </div>
-      </section>
+            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                <span class="text-[11px] font-bold text-slate-400 uppercase">🏆 Open Battles</span>
+                <span id="active-battle-count" class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">0 Active</span>
+            </div>
 
-      <!-- View 2: OPEN BATTLES / LUDO ARENA -->
-      <section id="battlesView" class="space-y-4 hidden">
-        
-        <!-- Top Controls: Create Battle -->
-        <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex items-center gap-2">
-          <input type="number" id="battleAmountInput" placeholder="Amount" class="flex-1 bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-800 font-medium">
-          <button onclick="createBattle()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-5 py-2 rounded-lg text-sm transition shadow-sm">
-            Set
-          </button>
+            <div id="battles-list-container" class="space-y-3"></div>
         </div>
 
-        <!-- Open Battles Header -->
-        <div class="flex items-center justify-center my-2">
-          <div class="h-[1px] bg-slate-300 flex-1"></div>
-          <span class="px-3 font-extrabold text-slate-800 text-sm tracking-wide uppercase flex items-center gap-1.5">
-            🏆 Open Battles (Classic) 🏆
-          </span>
-          <div class="h-[1px] bg-slate-300 flex-1"></div>
+        <!-- 3. WALLET TAB -->
+        <div id="tab-wallet" class="hidden space-y-4">
+            <div class="flex items-center justify-between">
+                <button onclick="switchTab('games')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-600">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Back
+                </button>
+                <h2 class="text-sm font-bold text-slate-800">My Wallet</h2>
+                <button onclick="switchTab('history')" class="text-xs text-rose-600 font-bold">History</button>
+            </div>
+
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+                <div class="text-[11px] font-bold text-slate-400 uppercase">Deposit Chips</div>
+                <div class="text-2xl font-black text-slate-800" id="wallet-deposit-balance">0</div>
+                <button onclick="openModal('deposit-modal')" class="w-full bg-slate-900 text-white font-bold py-2.5 rounded-xl text-xs">Add via UPI QR</button>
+            </div>
+
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+                <div class="text-[11px] font-bold text-slate-400 uppercase">Winning Chips</div>
+                <div class="text-2xl font-black text-emerald-600" id="wallet-winning-balance">5</div>
+                <button onclick="openModal('withdraw-modal')" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-xl text-xs">Withdraw Winnings</button>
+            </div>
         </div>
 
-        <!-- Battles List Container -->
-        <div id="battlesList" class="space-y-3">
-          <!-- Dynamic battle items injected via JS -->
-        </div>
-      </section>
-
-      <!-- View 3: WALLET PAGE -->
-      <section id="walletView" class="space-y-4 hidden">
-        
-        <!-- Wallet Navigation Top Bar -->
-        <div class="flex items-center justify-between pb-1">
-          <button onclick="navigateTo('home')" class="bg-indigo-900 text-white hover:bg-indigo-950 font-semibold px-4 py-1.5 rounded-lg text-sm flex items-center gap-1.5 shadow">
-            <i class="fa-solid fa-arrow-left"></i> Back
-          </button>
-          <button onclick="openModal('historyModal')" class="border border-slate-800 text-slate-800 hover:bg-slate-100 font-bold px-3 py-1.5 rounded-lg text-sm shadow-sm">
-            Wallet History
-          </button>
+        <!-- 4. HISTORY TAB -->
+        <div id="tab-history" class="hidden space-y-4">
+            <div class="flex items-center justify-between">
+                <button onclick="switchTab('wallet')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-600">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Back
+                </button>
+                <h2 class="text-sm font-bold text-slate-800">History</h2>
+                <div></div>
+            </div>
+            <div id="history-list-container" class="space-y-2"></div>
         </div>
 
-        <!-- Deposit Chips Box -->
-        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-          <div class="bg-slate-50 border-b border-slate-200 py-2.5 px-4 text-center font-bold text-slate-800">
-            Deposit Chips
-          </div>
-          <div class="p-5 text-center space-y-3">
-            <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Chips</div>
-            <div id="depositChipsVal" class="text-3xl font-black text-slate-900">0</div>
-            <button onclick="openModal('depositModal')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-lg text-sm transition shadow">
-              Add
-            </button>
-          </div>
+        <!-- 5. PROFILE TAB -->
+        <div id="tab-profile" class="hidden space-y-4">
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 text-center space-y-3">
+                <div class="w-16 h-16 bg-rose-100 rounded-full mx-auto flex items-center justify-center text-rose-600 text-2xl font-bold">A</div>
+                <div>
+                    <h3 class="font-bold text-base">Ashik</h3>
+                    <p class="text-xs text-slate-400">+91 9876543210</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden divide-y divide-slate-100 text-xs font-medium">
+                <div onclick="alert('Terms & Conditions apply.')" class="p-3.5 flex justify-between items-center cursor-pointer"><span>Term & Conditions</span><i class="fa-solid fa-chevron-right text-slate-400"></i></div>
+                <div onclick="alert('GST Policy as per laws.')" class="p-3.5 flex justify-between items-center cursor-pointer"><span>GST Policy</span><i class="fa-solid fa-chevron-right text-slate-400"></i></div>
+                <div onclick="alert('Privacy is secured.')" class="p-3.5 flex justify-between items-center cursor-pointer"><span>Privacy Policy</span><i class="fa-solid fa-chevron-right text-slate-400"></i></div>
+            </div>
         </div>
 
-        <!-- Winning Chips Box -->
-        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-          <div class="bg-slate-50 border-b border-slate-200 py-2.5 px-4 text-center font-bold text-slate-800">
-            Winning Chips
-          </div>
-          <div class="p-5 text-center space-y-3">
-            <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Chips</div>
-            <div id="winningChipsVal" class="text-3xl font-black text-slate-900">5</div>
-            <button onclick="openModal('withdrawModal')" class="w-full bg-indigo-900 hover:bg-indigo-950 text-white font-bold py-2.5 rounded-lg text-sm transition shadow">
-              Withdraw
-            </button>
-          </div>
-        </div>
+        <!-- 6. ADMIN PANEL TAB -->
+        <div id="tab-admin" class="hidden space-y-4">
+            <div class="bg-slate-900 text-white p-3.5 rounded-xl flex items-center justify-between shadow">
+                <div>
+                    <h2 class="text-xs font-extrabold uppercase"><i class="fa-solid fa-shield-halved text-rose-500 mr-1"></i> Admin Dashboard</h2>
+                    <p class="text-[10px] text-slate-400">Manage Deposits & Battles</p>
+                </div>
+                <button onclick="switchTab('games')" class="text-xs bg-slate-800 px-3 py-1.5 rounded text-slate-200 font-bold border border-slate-700">Exit</button>
+            </div>
 
-      </section>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-xs">
+                    <span class="text-[10px] text-slate-400 font-bold uppercase">Pending Deposits</span>
+                    <div id="admin-pending-count" class="text-xl font-black text-rose-600 mt-1">0</div>
+                </div>
+                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-xs">
+                    <span class="text-[10px] text-slate-400 font-bold uppercase">Pending Withdrawals</span>
+                    <div id="admin-withdraw-count" class="text-xl font-black text-amber-600 mt-1">0</div>
+                </div>
+            </div>
 
-      <!-- View 4: SIMPLE POLICY VIEWS -->
-      <section id="policyView" class="space-y-4 hidden">
-        <div class="flex items-center justify-between border-b pb-2">
-          <h2 id="policyTitle" class="text-xl font-bold text-slate-900">Terms & Conditions</h2>
-          <button onclick="navigateTo('home')" class="text-xs font-bold text-slate-600 bg-slate-200 px-3 py-1 rounded-md">Back</button>
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-xs text-slate-700 uppercase border-b border-slate-100 pb-2">📥 UPI Deposit Requests</h3>
+                <div id="admin-deposit-list" class="space-y-2"></div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-xs text-slate-700 uppercase border-b border-slate-100 pb-2">⚔️ Live Battles Control</h3>
+                <div id="admin-battles-list" class="space-y-2"></div>
+            </div>
         </div>
-        <div id="policyContent" class="text-sm text-slate-600 space-y-3 leading-relaxed">
-          <!-- Policy Text loaded dynamically -->
-        </div>
-      </section>
 
     </main>
 
-    <!-- Floating Support Actions (WhatsApp & Telegram & AI Floating Widget) -->
-    <div class="fixed bottom-3 right-4 z-20 flex flex-col items-end gap-2 max-w-[420px]">
-      
-      <!-- 24/7 AI Support Badge Floating Button -->
-      <button onclick="toggleAIChat()" class="bg-slate-900 text-amber-300 border border-amber-400 px-3 py-1.5 rounded-full shadow-lg text-xs font-bold flex items-center gap-1.5 hover:scale-105 transition transform">
-        <span>✨ 24/7 AI Support</span>
-      </button>
-
-      <!-- Circular Avatar Widget Icon -->
-      <div class="flex flex-col gap-2">
-        <!-- Telegram Button -->
-        <a href="https://t.me" target="_blank" class="w-10 h-10 bg-sky-500 text-white rounded-xl shadow-md flex items-center justify-center text-xl hover:bg-sky-600 transition">
-          <i class="fa-brands fa-telegram"></i>
-        </a>
-        <!-- WhatsApp Button -->
-        <a href="https://wa.me" target="_blank" class="w-10 h-10 bg-emerald-500 text-white rounded-xl shadow-md flex items-center justify-center text-xl hover:bg-emerald-600 transition">
-          <i class="fa-brands fa-whatsapp"></i>
-        </a>
-      </div>
-    </div>
-
-    <!-- SIDEBAR DRAWER MENU OVERLAY -->
-    <div id="sidebarOverlay" onclick="toggleSidebar(false)" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity"></div>
-    
-    <!-- SIDEBAR DRAWER MENU CONTAINER -->
-    <aside id="sidebar" class="fixed top-0 left-0 w-72 h-full bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col">
-      
-      <!-- Sidebar Header -->
-      <div class="bg-slate-900 text-white p-4 flex items-center justify-between">
-        <h3 class="font-extrabold text-base tracking-wide">AKPLAYERS</h3>
-        <button onclick="toggleSidebar(false)" class="text-slate-300 hover:text-white text-xl">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <!-- User Profile Card in Sidebar -->
-      <div class="p-4 border-b border-slate-100 flex items-center justify-between">
-        <div>
-          <div class="text-2xl font-black text-slate-900 flex items-center gap-1.5">
-            Ashik <span class="text-lg">👋</span>
-          </div>
-        </div>
-        <!-- Profile Avatar Icon -->
-        <div class="w-12 h-12 bg-rose-100 text-rose-500 border-2 border-rose-300 rounded-full flex items-center justify-center text-2xl shadow-sm">
-          <i class="fa-solid fa-user-ninja"></i>
-        </div>
-      </div>
-
-      <!-- Navigation Links -->
-      <nav class="flex-1 overflow-y-auto py-2">
-        <ul class="space-y-1 px-3 text-slate-800 font-semibold text-sm">
-          
-          <li>
-            <button onclick="navigateTo('home'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
-              <span class="flex items-center gap-3"><i class="fa-solid fa-dice text-slate-700 w-5"></i> Play</span>
-              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-          </li>
-
-          <li>
-            <button onclick="navigateTo('wallet'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
-              <span class="flex items-center gap-3"><i class="fa-solid fa-wallet text-slate-700 w-5"></i> Wallet</span>
-              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-          </li>
-
-          <li>
-            <button onclick="openModal('historyModal'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
-              <span class="flex items-center gap-3"><i class="fa-solid fa-clock-rotate-left text-slate-700 w-5"></i> History</span>
-              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-          </li>
-
-          <li>
-            <button onclick="showToast('Profile Updated'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
-              <span class="flex items-center gap-3"><i class="fa-solid fa-user-group text-slate-700 w-5"></i> Profile</span>
-              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-          </li>
-
-          <li>
-            <button onclick="openModal('referModal'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
-              <span class="flex items-center gap-3"><i class="fa-solid fa-gift text-slate-700 w-5"></i> Refer & Earn</span>
-              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-          </li>
-
-          <hr class="my-2 border-slate-100">
-
-          <li>
-            <button onclick="openPolicy('Terms'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
-              <span class="flex items-center gap-3"><i class="fa-solid fa-shield-halved text-slate-700 w-5"></i> Term & Conditions</span>
-              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-          </li>
-
-          <li>
-            <button onclick="openPolicy('GST'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
-              <span class="flex items-center gap-3"><i class="fa-solid fa-file-invoice text-slate-700 w-5"></i> GST Policy</span>
-              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-          </li>
-
-          <li>
-            <button onclick="openPolicy('Privacy'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
-              <span class="flex items-center gap-3"><i class="fa-solid fa-lock text-slate-700 w-5"></i> Privacy Policy</span>
-              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-          </li>
-
-          <li>
-            <button onclick="openPolicy('Refund'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
-              <span class="flex items-center gap-3"><i class="fa-solid fa-circle-exclamation text-slate-700 w-5"></i> Refund Policy</span>
-              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
-            </button>
-          </li>
-
-        </ul>
-      </nav>
-
-      <!-- Sidebar Footer -->
-      <div class="p-3 bg-slate-50 text-center border-t border-slate-200 text-xs text-slate-500 font-medium">
-        Akplayers v2.4 • Safe & Secure
-      </div>
-    </aside>
-
-    <!-- MODAL 1: RULES MODAL -->
-    <div id="rulesModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl relative">
-        <button onclick="closeModal('rulesModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-        <h3 class="text-xl font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
-          <i class="fa-solid fa-book-open text-amber-500"></i> Platform Rules
-        </h3>
-        <div class="text-xs text-slate-600 space-y-2.5 max-h-80 overflow-y-auto leading-relaxed">
-          <p class="p-2 bg-amber-50 text-amber-900 rounded-lg border border-amber-200 font-medium">
-            1. Single account per player allowed. Multiple accounts will lead to permanent ban.
-          </p>
-          <p class="p-2 bg-slate-50 text-slate-800 rounded-lg border border-slate-200">
-            2. Commission fee of 5% is deducted from winning total of each battle.
-          </p>
-          <p class="p-2 bg-slate-50 text-slate-800 rounded-lg border border-slate-200">
-            3. Screenshot of game result must be uploaded after match completion within 15 mins.
-          </p>
-          <p class="p-2 bg-slate-50 text-slate-800 rounded-lg border border-slate-200">
-            4. Referral code bonus of 2% is awarded directly to deposit wallet upon referred player match win.
-          </p>
-        </div>
-        <button onclick="closeModal('rulesModal')" class="w-full bg-slate-900 text-white font-bold py-2 rounded-xl text-sm">
-          Got It
-        </button>
-      </div>
-    </div>
-
-    <!-- MODAL 2: DEPOSIT MODAL -->
-    <div id="depositModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl relative">
-        <button onclick="closeModal('depositModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-        <h3 class="text-xl font-bold text-slate-900 border-b pb-2">Deposit Chips</h3>
-        
-        <div class="space-y-3">
-          <label class="block text-xs font-bold text-slate-600 uppercase">Enter Amount (₹)</label>
-          <input type="number" id="depositAmount" placeholder="e.g. 100" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 font-bold">
-          
-          <div class="grid grid-cols-3 gap-2 pt-1">
-            <button onclick="setDepositValue(100)" class="border border-slate-300 py-1 rounded text-xs font-bold hover:bg-slate-100">+100</button>
-            <button onclick="setDepositValue(250)" class="border border-slate-300 py-1 rounded text-xs font-bold hover:bg-slate-100">+250</button>
-            <button onclick="setDepositValue(500)" class="border border-slate-300 py-1 rounded text-xs font-bold hover:bg-slate-100">+500</button>
-          </div>
-
-          <div class="p-3 bg-indigo-50 border border-indigo-100 rounded-xl space-y-2 text-center">
-            <span class="text-xs text-indigo-900 font-semibold">Pay via UPI / QR Code</span>
-            <div class="bg-white p-2 border border-dashed border-indigo-300 rounded-lg inline-block">
-              <i class="fa-solid fa-qrcode text-5xl text-slate-800"></i>
+    <!-- Sidebar Drawer -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-50 hidden"></div>
+    <div id="sidebar-drawer" class="fixed top-0 left-0 bottom-0 w-64 bg-white z-50 shadow-2xl transform -translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-4 app-gradient text-white flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-full bg-white text-rose-600 flex items-center justify-center font-bold text-base">A</div>
+                <div>
+                    <h3 class="font-bold text-xs">Ashik</h3>
+                    <p class="text-[10px] text-rose-100">+91 9876543210</p>
+                </div>
             </div>
-            <p class="text-[11px] text-slate-500">Scan QR or tap below to instant add</p>
-          </div>
+            <button onclick="toggleSidebar()" class="text-white text-base"><i class="fa-solid fa-xmark"></i></button>
         </div>
-
-        <button onclick="handleDeposit()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-sm transition shadow">
-          Pay & Add Chips
-        </button>
-      </div>
+        <div class="flex-1 py-2 divide-y divide-slate-100 text-xs font-semibold">
+            <div onclick="switchTab('games'); toggleSidebar();" class="p-3.5 flex items-center gap-3 cursor-pointer"><i class="fa-solid fa-dice text-rose-500 w-4"></i> Play Games</div>
+            <div onclick="switchTab('wallet'); toggleSidebar();" class="p-3.5 flex items-center gap-3 cursor-pointer"><i class="fa-solid fa-wallet text-amber-500 w-4"></i> Wallet</div>
+            <div onclick="switchTab('history'); toggleSidebar();" class="p-3.5 flex items-center gap-3 cursor-pointer"><i class="fa-solid fa-clock-rotate-left text-blue-500 w-4"></i> History</div>
+            <div onclick="switchTab('profile'); toggleSidebar();" class="p-3.5 flex items-center gap-3 cursor-pointer"><i class="fa-solid fa-user text-purple-500 w-4"></i> Profile</div>
+            <div onclick="switchTab('admin'); toggleSidebar();" class="p-3.5 flex items-center gap-3 cursor-pointer text-rose-600 bg-rose-50/50"><i class="fa-solid fa-shield-halved w-4"></i> Admin Panel</div>
+        </div>
     </div>
 
-    <!-- MODAL 3: WITHDRAW MODAL -->
-    <div id="withdrawModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl relative">
-        <button onclick="closeModal('withdrawModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-        <h3 class="text-xl font-bold text-slate-900 border-b pb-2">Withdraw Chips</h3>
-        
-        <div class="space-y-3">
-          <div>
-            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Enter Chips Amount</label>
-            <input type="number" id="withdrawAmount" placeholder="Min 5 Chips" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 font-bold">
-          </div>
-
-          <div>
-            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">UPI ID / Mobile Number</label>
-            <input type="text" id="upiDetails" placeholder="username@upi or 9876543210" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600">
-          </div>
-
-          <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs text-slate-500">
-            ⚡ Instant Payouts processed directly to your PhonePe / GooglePay / Paytm UPI.
-          </div>
-        </div>
-
-        <button onclick="handleWithdraw()" class="w-full bg-indigo-900 hover:bg-indigo-950 text-white font-bold py-2.5 rounded-xl text-sm transition shadow">
-          Submit Withdrawal Request
-        </button>
-      </div>
-    </div>
-
-    <!-- MODAL 4: REFER & EARN MODAL -->
-    <div id="referModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl relative text-center">
-        <button onclick="closeModal('referModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-        <div class="w-16 h-16 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center text-3xl mx-auto shadow-inner">
-          <i class="fa-solid fa-gift"></i>
-        </div>
-        <h3 class="text-xl font-bold text-slate-900">Refer & Earn 2%</h3>
-        <p class="text-xs text-slate-600">
-          Share your referral link with friends and earn 2% commission on every game played by your friends forever!
-        </p>
-
-        <div class="bg-slate-100 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
-          <span class="text-xs font-mono font-bold text-slate-700">AKPLAYERS-ASHIK88</span>
-          <button onclick="copyToClipboard('AKPLAYERS-ASHIK88')" class="bg-slate-900 text-white text-xs px-3 py-1 rounded font-bold hover:bg-slate-800">
-            Copy
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- MODAL 5: WALLET HISTORY MODAL -->
-    <div id="historyModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl relative">
-        <button onclick="closeModal('historyModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-        <h3 class="text-lg font-bold text-slate-900 border-b pb-2">Wallet History</h3>
-        
-        <div id="historyList" class="space-y-2 max-h-60 overflow-y-auto text-xs">
-          <!-- History items injected dynamically -->
-        </div>
-
-        <button onclick="closeModal('historyModal')" class="w-full bg-slate-200 text-slate-800 font-bold py-2 rounded-lg text-sm">
-          Close
-        </button>
-      </div>
-    </div>
-
-    <!-- MODAL 6: AI CHAT SUPPORT -->
-    <div id="aiChatModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl max-w-sm w-full h-[420px] flex flex-col shadow-2xl relative overflow-hidden">
-        <div class="bg-slate-900 text-white p-3 flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <div class="w-7 h-7 bg-amber-400 rounded-full flex items-center justify-center text-slate-900 text-xs font-bold">✨</div>
-            <span class="font-bold text-sm">24/7 AI Support</span>
-          </div>
-          <button onclick="toggleAIChat()" class="text-slate-300 hover:text-white">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-
-        <div id="aiChatMessages" class="flex-1 p-3 overflow-y-auto space-y-2 text-xs">
-          <div class="bg-slate-100 p-2.5 rounded-xl max-w-[80%] text-slate-800">
-            Namaste Ashik! How can I help you today with Akplayers games or payments?
-          </div>
-        </div>
-
-        <div class="p-2 border-t border-slate-200 flex gap-1.5">
-          <input type="text" id="aiInput" placeholder="Type your question..." class="flex-1 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none">
-          <button onclick="sendAIMessage()" class="bg-slate-900 text-white font-bold px-3 py-1.5 rounded-lg text-xs">Send</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- TOAST NOTIFICATION BOX -->
-    <div id="toast" class="fixed bottom-16 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-2xl z-50 hidden opacity-0 transition-all duration-300">
-      Toast notification message
-    </div>
-
-  </div>
-
-  <!-- JAVASCRIPT APPLICATION LOGIC -->
-  <script>
-    // State Management
-    let depositChips = 0;
-    let winningChips = 5;
-    
-    // Sample Battle Data matching screenshot exact styles
-    let battles = [
-      { id: 1, p1: 'Om_Pr...', p2: 'Sahil...', amount: 50, avatar1: '👩', avatar2: '👩' },
-      { id: 2, p1: 'Mursa...', p2: 'Juber...', amount: 50, avatar1: '👩', avatar2: '🧑' },
-      { id: 3, p1: 'hunte...', p2: 'Payle...', amount: 350, avatar1: '👩', avatar2: '👩' },
-      { id: 4, p1: 'King_...', p2: 'Dhana...', amount: 2200, avatar1: '👨', avatar2: '👩' },
-      { id: 5, p1: 'Wasee...', p2: 'Arsha...', amount: 600, avatar1: '👨', avatar2: '👩' },
-      { id: 6, p1: 'kisor...', p2: 'HARIO...', amount: 100, avatar1: '👩', avatar2: '👨' }
-    ];
-
-    let walletHistory = [
-      { type: 'Bonus', amount: '+5 Chips', time: 'Just Now', status: 'Success' },
-      { type: 'Welcome Reward', amount: '+10 Chips', time: 'Yesterday', status: 'Success' }
-    ];
-
-    // Toggle Sidebar Navigation Drawer
-    function toggleSidebar(show) {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebarOverlay');
-      if (show) {
-        sidebar.classList.remove('-translate-x-full');
-        overlay.classList.remove('hidden');
-      } else {
-        sidebar.classList.add('-translate-x-full');
-        overlay.classList.add('hidden');
-      }
-    }
-
-    // View Navigation Router
-    function navigateTo(viewName) {
-      const home = document.getElementById('homeView');
-      const battlesView = document.getElementById('battlesView');
-      const walletView = document.getElementById('walletView');
-      const policyView = document.getElementById('policyView');
-
-      home.classList.add('hidden');
-      battlesView.classList.add('hidden');
-      walletView.classList.add('hidden');
-      policyView.classList.add('hidden');
-
-      if (viewName === 'home') home.classList.remove('hidden');
-      if (viewName === 'battles') {
-        battlesView.classList.remove('hidden');
-        renderBattles();
-      }
-      if (viewName === 'wallet') {
-        walletView.classList.remove('hidden');
-        updateWalletUI();
-      }
-    }
-
-    // Modal Control Functions
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
-    }
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-
-    // Copy to Clipboard Utility
-    function copyToClipboard(text) {
-      const tempInput = document.createElement('input');
-      tempInput.value = text;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand('copy');
-      document.body.removeChild(tempInput);
-      showToast('Copied to Clipboard!');
-    }
-
-    // Toast Alert Notification
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.innerText = message;
-      toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.remove('opacity-0'), 10);
-      setTimeout(() => {
-        toast.classList.add('opacity-0');
-        setTimeout(() => toast.classList.add('hidden'), 300);
-      }, 2500);
-    }
-
-    // Update Wallet Balances across UI
-    function updateWalletUI() {
-      const totalChips = depositChips + winningChips;
-      document.getElementById('headerBalance').innerText = totalChips;
-      document.getElementById('depositChipsVal').innerText = depositChips;
-      document.getElementById('winningChipsVal').innerText = winningChips;
-      renderHistory();
-    }
-
-    // Render Battles List
-    function renderBattles() {
-      const list = document.getElementById('battlesList');
-      list.innerHTML = '';
-
-      battles.forEach(battle => {
-        const battleCard = document.createElement('div');
-        battleCard.className = "bg-white border border-slate-200 rounded-2xl p-3.5 shadow-sm flex items-center justify-between";
-        battleCard.innerHTML = `
-          <!-- Player 1 -->
-          <div class="flex items-center gap-2 w-1/3">
-            <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-sm shadow-sm">
-              ${battle.avatar1}
+    <!-- Modals -->
+    <div id="deposit-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xs w-full p-5 shadow-2xl space-y-3">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                <h3 class="font-bold text-xs">Deposit Chips via UPI</h3>
+                <button onclick="closeModal('deposit-modal')" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <span class="font-bold text-xs text-slate-800 truncate">${battle.p1}</span>
-          </div>
-
-          <!-- Center VS & Amount -->
-          <div class="flex flex-col items-center justify-center w-1/3">
-            <div class="text-amber-600 font-extrabold text-sm italic tracking-widest flex items-center gap-1">
-              <span class="text-slate-400">V</span><span class="text-amber-500">S</span>
+            <div class="text-center space-y-2">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=upi://pay?pa=akplayers@upi&pn=Akplayers" alt="QR" class="w-32 h-32 mx-auto rounded">
+                <div class="text-[10px] text-slate-500">Pay to UPI: <strong class="text-slate-700">akplayers@upi</strong></div>
             </div>
-            <div class="text-emerald-700 font-black text-sm mt-0.5">
-              Rs ${battle.amount}
+            <div class="space-y-2 text-xs">
+                <input type="number" id="deposit-amt-input" placeholder="Amount Paid (₹)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+                <input type="text" id="deposit-utr-input" placeholder="12-Digit UTR Number" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+                <button onclick="submitDepositRequest()" class="w-full bg-rose-600 text-white font-bold py-2.5 rounded-lg">Submit Request</button>
             </div>
-          </div>
+        </div>
+    </div>
 
-          <!-- Player 2 / Join -->
-          <div class="flex items-center justify-end gap-2 w-1/3">
-            <span class="font-bold text-xs text-slate-800 truncate text-right">${battle.p2}</span>
-            <div class="w-8 h-8 rounded-full bg-cyan-100 flex items-center justify-center text-sm shadow-sm">
-              ${battle.avatar2}
+    <div id="withdraw-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xs w-full p-5 shadow-2xl space-y-3">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                <h3 class="font-bold text-xs">Withdraw Winnings</h3>
+                <button onclick="closeModal('withdraw-modal')" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
             </div>
-          </div>
-        `;
-        list.appendChild(battleCard);
-      });
-    }
+            <div class="space-y-2 text-xs">
+                <input type="text" id="withdraw-upi-input" placeholder="Your UPI ID (e.g. name@oksbi)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+                <input type="number" id="withdraw-amt-input" placeholder="Amount to Withdraw" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+                <button onclick="submitWithdrawRequest()" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-lg">Request Payout</button>
+            </div>
+        </div>
+    </div>
 
-    // Create New Battle Event
-    function createBattle() {
-      const input = document.getElementById('battleAmountInput');
-      const val = parseInt(input.value);
+    <div id="create-battle-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xs w-full p-5 shadow-2xl space-y-3">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                <h3 class="font-bold text-xs">Create Battle Room</h3>
+                <button onclick="closeModal('create-battle-modal')" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="space-y-2 text-xs">
+                <input type="number" id="new-battle-amount" placeholder="Battle Amount (₹)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+                <button onclick="confirmCreateBattle()" class="w-full bg-rose-600 text-white font-bold py-2.5 rounded-lg">Publish Battle</button>
+            </div>
+        </div>
+    </div>
 
-      if (!val || val < 10) {
-        showToast('Minimum battle amount is Rs 10');
-        return;
-      }
+    <!-- JavaScript Application Core -->
+    <script>
+        let currentUser = { name: "Ashik", depositChips: 0, winningChips: 5 };
+        let battles = [
+            { id: 1, game: 'Ludo Classic', creator: 'Om_Pr...', opponent: 'Sahil...', amount: 50, status: 'Open' },
+            { id: 2, game: 'Rummy', creator: 'hunte...', opponent: 'Payle...', amount: 350, status: 'Open' }
+        ];
+        let depositRequests = [{ id: 101, user: 'Ashik', amount: 500, utr: '328192831290', status: 'Pending' }];
+        let withdrawRequests = [];
+        let historyList = [{ type: 'Bonus', amount: '+5 Chips', date: '21 Oct, 08:30 AM', status: 'Success' }];
+        let selectedGameForBattles = 'Ludo Classic';
 
-      if (depositChips + winningChips < val) {
-        showToast('Insufficient wallet chips! Please add chips.');
-        openModal('depositModal');
-        return;
-      }
+        function updateUI() {
+            document.getElementById('header-chips').innerText = currentUser.winningChips + currentUser.depositChips;
+            document.getElementById('wallet-deposit-balance').innerText = currentUser.depositChips;
+            document.getElementById('wallet-winning-balance').innerText = currentUser.winningChips;
 
-      // Deduct chips from wallet
-      if (depositChips >= val) {
-        depositChips -= val;
-      } else {
-        const rem = val - depositChips;
-        depositChips = 0;
-        winningChips -= rem;
-      }
+            // Render Battles
+            const battleContainer = document.getElementById('battles-list-container');
+            const filtered = battles.filter(b => b.game === selectedGameForBattles);
+            document.getElementById('active-battle-count').innerText = `${filtered.length} Active`;
 
-      battles.unshift({
-        id: Date.now(),
-        p1: 'Ashik',
-        p2: 'Waiting...',
-        amount: val,
-        avatar1: '🥷',
-        avatar2: '⏳'
-      });
+            battleContainer.innerHTML = filtered.length === 0 ? 
+                `<div class="bg-white p-6 rounded-xl text-center text-slate-400 text-xs">No active battles. Create one!</div>` :
+                filtered.map(b => `
+                    <div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
+                        <div>
+                            <span class="font-bold">${b.creator} vs ${b.opponent}</span>
+                            <span class="block text-[10px] text-slate-400 uppercase">${b.status}</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-extrabold text-emerald-600 block">₹${b.amount}</span>
+                            ${b.status === 'Open' ? `<button onclick="joinBattle(${b.id})" class="mt-1 bg-emerald-600 text-white px-2.5 py-1 rounded font-bold text-[10px]">Join</button>` : `<span class="text-rose-500 font-bold text-[10px]">Running</span>`}
+                        </div>
+                    </div>
+                `).join('');
 
-      walletHistory.unshift({
-        type: 'Battle Entry',
-        amount: `- ${val} Chips`,
-        time: 'Just Now',
-        status: 'Created'
-      });
+            // Render History
+            document.getElementById('history-list-container').innerHTML = historyList.map(h => `
+                <div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center text-xs">
+                    <div><span class="font-bold">${h.type}</span><span class="block text-[10px] text-slate-400">${h.date}</span></div>
+                    <span class="font-extrabold ${h.amount.startsWith('+') ? 'text-emerald-600' : 'text-rose-600'}">${h.amount}</span>
+                </div>
+            `).join('');
 
-      input.value = '';
-      updateWalletUI();
-      renderBattles();
-      showToast('Battle Created Successfully!');
-    }
+            // Admin Panel
+            document.getElementById('admin-pending-count').innerText = depositRequests.filter(d => d.status === 'Pending').length;
+            document.getElementById('admin-withdraw-count').innerText = withdrawRequests.filter(w => w.status === 'Pending').length;
 
-    // Deposit Handling
-    function setDepositValue(val) {
-      document.getElementById('depositAmount').value = val;
-    }
+            document.getElementById('admin-deposit-list').innerHTML = depositRequests.filter(d => d.status === 'Pending').length === 0 ? 
+                `<p class="text-[11px] text-slate-400 text-center py-1">No pending deposits.</p>` :
+                depositRequests.map((d, i) => d.status === 'Pending' ? `
+                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs flex justify-between items-center">
+                        <div><strong class="block">${d.user} - ₹${d.amount}</strong><span class="text-[10px] text-slate-500">UTR: ${d.utr}</span></div>
+                        <button onclick="approveDeposit(${i})" class="bg-emerald-600 text-white px-2.5 py-1 rounded text-[10px] font-bold">Approve</button>
+                    </div>
+                ` : '').join('');
 
-    function handleDeposit() {
-      const amountInput = document.getElementById('depositAmount');
-      const amount = parseInt(amountInput.value);
-
-      if (!amount || amount <= 0) {
-        showToast('Please enter a valid amount');
-        return;
-      }
-
-      depositChips += amount;
-      walletHistory.unshift({
-        type: 'Deposit UPI',
-        amount: `+${amount} Chips`,
-        time: 'Just Now',
-        status: 'Success'
-      });
-
-      amountInput.value = '';
-      closeModal('depositModal');
-      updateWalletUI();
-      showToast(`Added ${amount} Deposit Chips!`);
-    }
-
-    // Withdrawal Handling
-    function handleWithdraw() {
-      const amountInput = document.getElementById('withdrawAmount');
-      const upiInput = document.getElementById('upiDetails');
-      const amount = parseInt(amountInput.value);
-
-      if (!amount || amount < 5) {
-        showToast('Minimum withdrawal is 5 Chips');
-        return;
-      }
-      if (!upiInput.value.trim()) {
-        showToast('Please enter your UPI ID');
-        return;
-      }
-      if (winningChips < amount) {
-        showToast('Insufficient Winning Chips balance!');
-        return;
-      }
-
-      winningChips -= amount;
-      walletHistory.unshift({
-        type: 'Withdrawal Request',
-        amount: `-${amount} Chips`,
-        time: 'Just Now',
-        status: 'Pending'
-      });
-
-      amountInput.value = '';
-      closeModal('withdrawModal');
-      updateWalletUI();
-      showToast('Withdrawal Request Submitted Successfully!');
-    }
-
-    // Render Wallet History
-    function renderHistory() {
-      const container = document.getElementById('historyList');
-      container.innerHTML = '';
-
-      if (walletHistory.length === 0) {
-        container.innerHTML = '<div class="text-center text-slate-400 py-4">No transactions yet</div>';
-        return;
-      }
-
-      walletHistory.forEach(item => {
-        const el = document.createElement('div');
-        el.className = "flex items-center justify-between p-2.5 bg-slate-50 rounded-lg border border-slate-200";
-        el.innerHTML = `
-          <div>
-            <div class="font-bold text-slate-800">${item.type}</div>
-            <div class="text-[10px] text-slate-400">${item.time}</div>
-          </div>
-          <div class="text-right">
-            <div class="font-black ${item.amount.includes('+') ? 'text-emerald-600' : 'text-rose-600'}">${item.amount}</div>
-            <span class="text-[10px] font-semibold text-slate-500">${item.status}</span>
-          </div>
-        `;
-        container.appendChild(el);
-      });
-    }
-
-    // Policy Page Viewer
-    function openPolicy(type) {
-      const title = document.getElementById('policyTitle');
-      const content = document.getElementById('policyContent');
-
-      title.innerText = `${type} Policy`;
-
-      if (type === 'Terms') {
-        content.innerHTML = `
-          <p>Welcome to Akplayers. By using our platform, you agree to comply with our fair play policies, anti-cheat regulations, and withdrawal verification rules.</p>
-          <p>1. Players must be 18+ years of age to participate in real-chip matches.</p>
-          <p>2. Collusion or fraud will result in account cancellation without refund.</p>
-        `;
-      } else if (type === 'GST') {
-        content.innerHTML = `
-          <p>All deposits and prize pools adhere to standard online gaming regulations. GST components are handled transparently per transaction receipts.</p>
-        `;
-      } else if (type === 'Privacy') {
-        content.innerHTML = `
-          <p>Your user details, wallet addresses, and payment information are end-to-end encrypted. Akplayers never shares personal information with third parties.</p>
-        `;
-      } else if (type === 'Refund') {
-        content.innerHTML = `
-          <p>Deposits are added instantly to your wallet. In case of failed transaction debits from your bank without chip credit, refunds are processed within 24-48 business hours.</p>
-        `;
-      }
-
-      navigateTo('policy');
-    }
-
-    // Download App Action
-    function downloadApp() {
-      showToast('Akplayers APK Download Started!');
-    }
-
-    // AI Chat Floating Dialog Toggler
-    function toggleAIChat() {
-      const modal = document.getElementById('aiChatModal');
-      modal.classList.toggle('hidden');
-    }
-
-    // Send AI Chat Message
-    function sendAIMessage() {
-      const input = document.getElementById('aiInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const chatBox = document.getElementById('aiChatMessages');
-      
-      // User message
-      const userMsg = document.createElement('div');
-      userMsg.className = "bg-slate-900 text-white p-2.5 rounded-xl max-w-[80%] ml-auto text-xs";
-      userMsg.innerText = text;
-      chatBox.appendChild(userMsg);
-
-      input.value = '';
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-      // Automated AI Response simulation
-      setTimeout(() => {
-        const aiMsg = document.createElement('div');
-        aiMsg.className = "bg-slate-100 p-2.5 rounded-xl max-w-[80%] text-slate-800 text-xs";
-        
-        if (text.toLowerCase().includes('deposit') || text.toLowerCase().includes('add')) {
-          aiMsg.innerText = "To deposit chips, click on the Wallet button at the top right, then tap 'Add' in the Deposit Chips section.";
-        } else if (text.toLowerCase().includes('withdraw')) {
-          aiMsg.innerText = "You can withdraw winning chips instantly to your UPI ID from the Wallet page.";
-        } else {
-          aiMsg.innerText = "Thanks for reaching Akplayers support! Our support team is online 24/7 to help with game issues or withdrawals.";
+            document.getElementById('admin-battles-list').innerHTML = battles.length === 0 ? 
+                `<p class="text-[11px] text-slate-400 text-center py-1">No active battles.</p>` :
+                battles.map((b, i) => `
+                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs flex justify-between items-center">
+                        <div><strong class="block">${b.game} (₹${b.amount})</strong><span class="text-[10px] text-slate-500">${b.creator} vs ${b.opponent}</span></div>
+                        <button onclick="adminDeclareWinner(${i})" class="bg-indigo-600 text-white px-2.5 py-1 rounded text-[10px] font-bold">Winner</button>
+                    </div>
+                `).join('');
         }
-        
-        chatBox.appendChild(aiMsg);
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }, 600);
-    }
 
-    // Initial Load setup
-    window.onload = function() {
-      updateWalletUI();
-      renderBattles();
-    };
-  </scr
+        function switchTab(tab) {
+            ['games', 'battles', 'wallet', 'history', 'profile', 'admin'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+            });
+            document.getElementById(`tab-${tab}`).classList.remove('hidden');
+            window.scrollTo(0, 0);
+            updateUI();
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar-drawer').classList.toggle('-translate-x-full');
+            document.getElementById('sidebar-overlay').classList.toggle('hidden');
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        function openBattles(game) {
+            selectedGameForBattles = game;
+            document.getElementById('battle-game-title').innerText = `${game} Battles`;
+            switchTab('battles');
+        }
+
+        function submitDepositRequest() {
+            let amt = parseInt(document.getElementById('deposit-amt-input').value);
+            let utr = document.getElementById('deposit-utr-input').value;
+            if(!amt || !utr) { alert('Enter valid amount and UTR'); return; }
+            depositRequests.push({ id: Date.now(), user: currentUser.name, amount: amt, utr: utr, status: 'Pending' });
+            closeModal('deposit-modal');
+            alert('Deposit request submitted successfully!');
+            updateUI();
+        }
+
+        function approveDeposit(index) {
+            depositRequests[index].status = 'Approved';
+            currentUser.depositChips += depositRequests[index].amount;
+            historyList.unshift({ type: 'Deposit Approved', amount: `+₹${depositRequests[index].amount}`, date: 'Just now', status: 'Success' });
+            alert('Deposit approved and chips added!');
+            updateUI();
+        }
+
+        function submitWithdrawRequest() {
+            let upi = document.getElementById('withdraw-upi-input').value;
+            let amt = parseInt(document.getElementById('withdraw-amt-input').value);
+            if(!upi || !amt || amt > currentUser.winningChips) { alert('Invalid input or insufficient balance'); return; }
+            currentUser.winningChips -= amt;
+            withdrawRequests.push({ id: Date.now(), user: currentUser.name, amount: amt, upi: upi, status: 'Pending' });
+            historyList.unshift({ type: 'Withdrawal', amount: `-₹${amt}`, date: 'Just now', status: 'Pending' });
+            closeModal('withdraw-modal');
+            alert('Withdrawal requested successfully!');
+            updateUI();
+        }
+
+        function createCustomBattle() {
+            let amt = parseInt(document.getElementById('battle-amount-input').value);
+            if(!amt) { alert('Enter amount'); return; }
+            battles.unshift({ id: Date.now(), game: selectedGameForBattles, creator: currentUser.name, opponent: 'Waiting...', amount: amt, status: 'Open' });
+            document.getElementById('battle-amount-input').value = '';
+            alert('Battle created!');
+            updateUI();
+        }
+
+        function confirmCreateBattle() {
+            let amt = parseInt(document.getElementById('new-battle-amount').value);
+            if(!amt) { alert('Enter amount'); return; }
+            battles.unshift({ id: Date.now(), game: selectedGameForBattles, creator: currentUser.name, opponent: 'Waiting...', amount: amt, status: 'Open' });
+            closeModal('create-battle-modal');
+            alert('Battle created!');
+            updateUI();
+        }
+
+        function joinBattle(id) {
+            let b = battles.find(x => x.id === id);
+            if(b) {
+                b.status = 'Running';
+                b.opponent = currentUser.name;
+                alert('Joined battle successfully!');
+                updateUI();
+            }
+        }
+
+        function adminDeclareWinner(index) {
+            if(confirm('Declare current user as winner?')) {
+                let prize = battles[index].amount * 2;
+                currentUser.winningChips += prize;
+                battles.splice(index, 1);
+                historyList.unshift({ type: 'Battle Win', amount: `+₹${prize}`, date: 'Just now', status: 'Success' });
+                alert('Winner declared and prize credited!');
+                updateUI();
+            }
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>

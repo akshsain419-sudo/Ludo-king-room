@@ -1,212 +1,1019 @@
-
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ludo King Room</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#101827;color:white;font-family:Arial,sans-serif;text-align:center}
-header{background:#16a34a;padding:18px 8px;font-size:25px;font-weight:bold}
-main{max-width:520px;margin:auto;padding:15px}
-.card{background:#202c40;padding:18px;border-radius:16px;margin:14px 0}
-button,input,select{font-size:16px;padding:12px;border-radius:9px;border:0}
-button{background:#22c55e;color:#062e18;font-weight:bold;cursor:pointer;margin:5px}
-button:disabled{opacity:.4}
-input,select{max-width:100%;background:white;color:#111}
-.small{font-size:13px;color:#cbd5e1;line-height:1.6}
-.hidden{display:none!important}
-#board{display:grid;grid-template-columns:repeat(11,1fr);gap:2px;margin:14px auto;max-width:420px;aspect-ratio:1}
-.cell{background:#e5e7eb;color:#111;border-radius:4px;display:flex;align-items:center;justify-content:center;min-width:0;aspect-ratio:1;font-size:clamp(10px,2.8vw,16px);font-weight:bold}
-.track{background:#fff7d6}
-.red{background:#ef4444;color:white}
-.blue{background:#3b82f6;color:white}
-.green{background:#22c55e;color:#052e16}
-.yellow{background:#facc15;color:#422006}
-.home{background:#334155;color:#fff}
-#dice{font-size:52px;margin:8px}
-.tokenlist{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
-.tokenlist button{font-size:14px;margin:2px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akplayers - Play & Earn</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              red: '#e53e3e',
+              dark: '#1a1d24',
+              purple: '#5b21b6',
+              green: '#16a34a',
+              amber: '#d97706'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    /* Marquee Animation */
+    .marquee-container {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-content {
+      display: inline-block;
+      animation: marquee 18s linear infinite;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* Gradient Logo Icon Background */
+    .logo-flame {
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    }
+    
+    .vs-badge {
+      background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    }
+
+    /* Pulse animation for live badge */
+    .pulse-glow {
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+  </style>
 </head>
-<body>
-<header>🎲 Aksh LUDO KING ROOM</header>
-<main>
-<section class="card" id="welcome">
-<h2>खेल की दुनिया में आपका स्वागत है!</h2>
-<p>अपना रूम बनाएँ और लूडो खेलें।</p>
-<button onclick="createRoom()">🏠 रूम बनाएँ</button>
-<hr>
-<p>रूम कोड डालकर जुड़ें</p>
-<input id="joinCode" placeholder="रूम कोड" maxlength="6">
-<button onclick="joinRoom()">रूम जॉइन करें</button>
-<p class="small">यह real है। दूसरे मोबाइल से जुड़ने के लिए ऑनलाइन सर्वर चाहिए।</p>
-</section>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex justify-center items-start">
 
-<section class="card hidden" id="setup">
-<h2>गेम सेटिंग</h2>
-<label>खिलाड़ियों की संख्या</label><br>
-<select id="playerCount">
-<option value="2">2 खिलाड़ी</option>
-<option value="3">3 खिलाड़ी</option>
-<option value="4" selected>4 खिलाड़ी</option>
-</select><br>
-<button onclick="startGame()">गेम शुरू करें</button>
-<button onclick="goHome()">वापस</button>
-</section>
+  <!-- Mobile Frame Container for Desktop View (Responsive Mobile Canvas) -->
+  <div class="w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col pb-12 overflow-hidden border-x border-slate-200">
 
-<section class="card hidden" id="game">
-<h2 id="roomTitle">लूडो गेम</h2>
-<p id="turnText">खिलाड़ी की बारी</p>
-<div id="dice">🎲</div>
-<button id="rollBtn" onclick="rollDice()">पासा फेंकें</button>
-<p id="message">पासा फेंककर खेल शुरू करें।</p>
-<div id="board"></div>
-<h3>अपनी गोटी चुनें</h3>
-<div id="tokens" class="tokenlist"></div>
-<p class="small">नियम: गोटी घर से निकालने के लिए 6 चाहिए। अपनी बारी में गोटी चुनें। यह शुरुआती डेमो है, आधिकारिक लूडो नियमों का पूरा संस्करण नहीं।</p>
-<button onclick="newGame()">नया गेम</button>
-<button onclick="goHome()">मुख्य पेज</button>
-</section>
+    <!-- Top Announcement Marquee Banner -->
+    <div class="bg-rose-600 text-white text-xs font-semibold py-1.5 px-3 flex items-center shadow-sm z-30">
+      <div class="marquee-container w-full">
+        <div class="marquee-content">
+          Commission: 5% • Referral: 2% For All Games 😍 &nbsp;&nbsp;&nbsp;&nbsp; Instant Withdrawal 24/7 🚀 &nbsp;&nbsp;&nbsp;&nbsp; Fair Play Guaranteed 🎯
+        </div>
+      </div>
+    </div>
 
-<section class="card">
-<h3>💰 डेमो वॉलेट</h3>
-<p>डेमो बैलेंस: ₹100</p>
-<p class="small">यह केवल डेमो है। असली पैसे जमा करने या निकालने की सुविधा नहीं है।</p>
-</section>
-</main>
-<script>
-const names=["लाल","नीला","हरा","पीला"];
-const colors=["red","blue","green","yellow"];
-let room="",players=2,turn=0,dice=0,waiting=false;
-let pieces=[],path=[],cells=[];
+    <!-- Header Navigation -->
+    <header class="bg-white border-b border-slate-200 px-4 py-2.5 flex items-center justify-between sticky top-0 z-20 shadow-sm">
+      <div class="flex items-center gap-3">
+        <!-- Hamburger Menu Toggle -->
+        <button id="hamburgerBtn" onclick="toggleSidebar(true)" class="text-slate-700 hover:text-slate-900 text-2xl focus:outline-none">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        
+        <!-- Brand Logo -->
+        <div onclick="navigateTo('home')" class="flex items-center gap-2 cursor-pointer select-none">
+          <div class="w-10 h-10 rounded-full logo-flame flex items-center justify-center text-white shadow-md">
+            <i class="fa-solid fa-gamepad text-xl"></i>
+          </div>
+          <span class="font-extrabold text-xl text-slate-900 tracking-tight flex flex-col leading-tight">
+            <span>AKPLAYERS</span>
+          </span>
+        </div>
+      </div>
 
-function createRoom(){
- room=String(Math.floor(1000+Math.random()*9000));
- document.getElementById("joinCode").value=room;
- document.getElementById("welcome").classList.add("hidden");
- document.getElementById("setup").classList.remove("hidden");
- alert("आपका डेमो रूम कोड: "+room);
-}
-function joinRoom(){
- const code=document.getElementById("joinCode").value.trim();
- if(!code){alert("पहले रूम कोड डालें।");return;}
- room=code;
- document.getElementById("welcome").classList.add("hidden");
- document.getElementById("setup").classList.remove("hidden");
- alert("डेमो रूम खुल गया। यह कोड दूसरे मोबाइल से ऑनलाइन कनेक्शन नहीं बनाता।");
-}
-function goHome(){
- document.getElementById("game").classList.add("hidden");
- document.getElementById("setup").classList.add("hidden");
- document.getElementById("welcome").classList.remove("hidden");
-}
-function newGame(){
- document.getElementById("game").classList.add("hidden");
- document.getElementById("setup").classList.remove("hidden");
-}
-function startGame(){
- players=Number(document.getElementById("playerCount").value);
- turn=0;dice=0;waiting=false;
- pieces=Array.from({length:players},()=>[-1,-1,-1,-1]);
- document.getElementById("setup").classList.add("hidden");
- document.getElementById("game").classList.remove("hidden");
- document.getElementById("roomTitle").textContent="🎲 रूम: "+(room||"डेमो");
- buildPath();render();
-}
-function buildPath(){
- const coords=[];
- for(let c=0;c<11;c++)coords.push([0,c]);
- for(let r=1;r<11;r++)coords.push([r,10]);
- for(let c=9;c>=0;c--)coords.push([10,c]);
- for(let r=9;r>=1;r--)coords.push([r,0]);
- path=coords;
- const board=document.getElementById("board");
- board.innerHTML="";
- cells=Array(path.length);
- const lookup={};
- path.forEach((p,i)=>lookup[p.join(",")]=i);
- for(let r=0;r<11;r++){
-  for(let c=0;c<11;c++){
-   const el=document.createElement("div");
-   const idx=lookup[r+","+c];
-   el.className="cell";
-   if(idx!==undefined){el.classList.add("track");cells[idx]=el;}
-   else if(r>=4&&r<=6&&c>=4&&c<=6){
-    el.classList.add("home");el.textContent=(r===5&&c===5)?"🏆":"";
-   }else{
-    const zone=(r<4&&c<4)?0:(r<4&&c>6)?1:(r>6&&c>6)?2:3;
-    el.classList.add(colors[zone]);
-    el.style.opacity=".85";
-    el.textContent=(r===1||r===9)&&(c===1||c===9)?"🏠":"";
-   }
-   board.appendChild(el);
-  }
- }
-}
-function rollDice(){
- if(waiting)return;
- dice=Math.floor(Math.random()*6)+1;
- document.getElementById("dice").textContent=["","⚀","⚁","⚂","⚃","⚄","⚅"][dice];
- waiting=true;
- document.getElementById("message").textContent=
- names[turn]+" खिलाड़ी: "+dice+" आया। अब अपनी गोटी चुनें।";
- renderTokens();
-}
-function choosePiece(index){
- if(!waiting)return;
- let pos=pieces[turn][index];
- if(pos===-1&&dice!==6){
-  document.getElementById("message").textContent="गोटी घर से निकालने के लिए 6 चाहिए।";
-  return;
- }
- if(pos===-1)pieces[turn][index]=0;
- else pieces[turn][index]=pos+dice;
- if(pieces[turn][index]>=40){
-  pieces[turn][index]=40;
-  document.getElementById("message").textContent=names[turn]+" की गोटी फिनिश पर पहुँच गई!";
- }else{
-  document.getElementById("message").textContent=names[turn]+" ने गोटी चला दी।";
- }
- waiting=false;
- if(dice!==6)turn=(turn+1)%players;
- render();
-}
-function renderTokens(){
- const box=document.getElementById("tokens");
- box.innerHTML="";
- for(let i=0;i<4;i++){
-  const b=document.createElement("button");
-  b.textContent="गोटी "+(i+1)+" ("+(pieces[turn][i]===-1?"घर":pieces[turn][i]===40?"फिनिश":pieces[turn][i])+")";
-  b.className=colors[turn];
-  b.disabled=!waiting;
-  b.onclick=()=>choosePiece(i);
-  box.appendChild(b);
- }
-}
-function render(){
- document.getElementById("turnText").textContent=
- "अब "+names[turn]+" खिलाड़ी की बारी";
- document.getElementById("rollBtn").disabled=waiting;
- cells.forEach(el=>{if(el)el.textContent="";});
- path.forEach((p,i)=>{
-  const el=cells[i];
-  if(!el)return;
-  const occupants=[];
-  for(let pl=0;pl<players;pl++){
-   for(let t=0;t<4;t++){
-    if(pieces[pl][t]===i&&i!==40)occupants.push(colors[pl]);
-   }
-  }
-  if(occupants.length){
-   el.textContent="●";
-   el.style.color=occupants.length>1?"#111":
-    ({red:"#ef4444",blue:"#2563eb",green:"#15803d",yellow:"#a16207"}[occupants[0]]);
-  }
- });
- renderTokens();
-}
-</script>
+      <!-- Action Buttons (Download & Wallet) -->
+      <div class="flex items-center gap-2.5">
+        <!-- App Download Icon -->
+        <button onclick="downloadApp()" class="border-2 border-emerald-500 text-emerald-600 rounded-lg p-1.5 hover:bg-emerald-50 transition" title="Download App">
+          <i class="fa-solid fa-download text-base"></i>
+        </button>
+
+        <!-- Wallet Balance Chip -->
+        <div onclick="navigateTo('wallet')" class="flex items-center bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-sm cursor-pointer hover:bg-emerald-600 transition gap-1.5 text-sm">
+          <i class="fa-solid fa-wallet text-xs"></i>
+          <span id="headerBalance">5</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Dynamic Container -->
+    <main id="mainContainer" class="flex-1 p-3.5 overflow-y-auto">
+
+      <!-- View 1: HOME / GAMES SCREEN -->
+      <section id="homeView" class="space-y-4">
+        
+        <!-- Hindi Live Notice Alert Banner -->
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 shadow-sm flex items-start gap-2.5">
+          <div class="text-amber-600 text-xl flex-shrink-0 mt-0.5">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <div class="text-amber-900 text-sm font-semibold leading-snug">
+            Notice:-सभी प्लेयर्स live Chat पर मैसेज करे watshapp पर कोई मैसेज ना करे
+          </div>
+        </div>
+
+        <!-- Games Section Header & Rules Button -->
+        <div class="flex items-center justify-between pt-1">
+          <h2 class="text-2xl font-black text-slate-800 tracking-tight">Games</h2>
+          <button onclick="openModal('rulesModal')" class="border border-slate-400 text-slate-700 hover:bg-slate-100 font-medium px-3 py-1 rounded-lg text-sm flex items-center gap-1.5 shadow-sm transition">
+            <i class="fa-circle-info text-slate-500"></i> Rules
+          </button>
+        </div>
+
+        <!-- Games Grid (2x2 Display) -->
+        <div class="grid grid-cols-2 gap-3.5">
+          
+          <!-- Card 1: Ludo Classic -->
+          <div onclick="navigateTo('battles')" class="relative bg-gradient-to-br from-indigo-500 via-blue-600 to-cyan-500 rounded-2xl p-0.5 shadow-lg overflow-hidden group cursor-pointer transform active:scale-95 transition">
+            <div class="bg-gradient-to-b from-cyan-400 to-blue-700 rounded-[14px] p-3 text-white h-44 flex flex-col justify-between relative overflow-hidden">
+              <div class="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+              
+              <!-- Game Title Graphic Header -->
+              <div class="z-10 text-center">
+                <div class="inline-block bg-sky-900/80 border border-amber-300 text-amber-300 font-extrabold text-xs px-2.5 py-0.5 rounded-md uppercase shadow">
+                  LUDO CLASSIC
+                </div>
+              </div>
+
+              <!-- Center Graphic Visual -->
+              <div class="flex justify-center items-center my-auto z-10 relative">
+                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-xl border border-white/40 flex items-center justify-center text-3xl shadow-inner">
+                  🎲
+                </div>
+                <div class="absolute -bottom-1 font-bold text-[10px] bg-red-600 px-2 py-0.5 rounded-full uppercase tracking-wider text-white shadow">
+                  Classic Arena
+                </div>
+              </div>
+
+              <!-- Card Footer Badges -->
+              <div class="flex justify-between items-end text-[11px] font-bold z-10">
+                <span class="bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded-md text-slate-100 border border-white/20">
+                  2 PLAYERS
+                </span>
+                <span class="bg-emerald-600 text-white px-2 py-0.5 rounded-md shadow border border-emerald-400">
+                  ₹50 - ₹10000
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Snake & Ladders -->
+          <div onclick="showToast('Snake & Ladders starting soon!')" class="relative bg-gradient-to-br from-amber-400 via-orange-500 to-red-500 rounded-2xl p-0.5 shadow-lg overflow-hidden group cursor-pointer transform active:scale-95 transition">
+            <div class="bg-gradient-to-b from-amber-300 to-emerald-700 rounded-[14px] p-3 text-white h-44 flex flex-col justify-between relative overflow-hidden">
+              
+              <!-- NEW Badge -->
+              <div class="absolute top-0 left-0 bg-amber-400 text-slate-900 font-black text-[10px] px-3 py-1 rounded-br-lg shadow uppercase tracking-wider z-20">
+                NEW
+              </div>
+
+              <!-- Graphic Header -->
+              <div class="z-10 text-center mt-3">
+                <div class="font-extrabold text-sm text-amber-200 drop-shadow-md uppercase tracking-tight">
+                  Snake & Ladders
+                </div>
+              </div>
+
+              <!-- Center Graphic Visual -->
+              <div class="flex justify-center items-center my-auto z-10">
+                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-xl border border-white/40 flex items-center justify-center text-3xl shadow-inner">
+                  🐍
+                </div>
+              </div>
+
+              <!-- Footer Badge -->
+              <div class="text-center z-10">
+                <span class="bg-black/60 backdrop-blur-sm px-2.5 py-0.5 rounded-md text-[11px] font-semibold text-slate-100 border border-white/20">
+                  Quick Battles
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Rummy -->
+          <div onclick="showToast('Rummy table joining...')" class="relative bg-gradient-to-br from-emerald-400 via-teal-600 to-cyan-700 rounded-2xl p-0.5 shadow-lg overflow-hidden group cursor-pointer transform active:scale-95 transition">
+            <div class="bg-gradient-to-b from-emerald-500 to-green-800 rounded-[14px] p-3 text-white h-44 flex flex-col justify-between relative overflow-hidden">
+              
+              <!-- NEW Badge -->
+              <div class="absolute top-0 left-0 bg-amber-400 text-slate-900 font-black text-[10px] px-3 py-1 rounded-br-lg shadow uppercase tracking-wider z-20">
+                NEW
+              </div>
+
+              <!-- Graphic Header -->
+              <div class="z-10 text-center mt-3">
+                <div class="font-extrabold text-base text-amber-300 tracking-wide uppercase">
+                  RUMMY
+                </div>
+              </div>
+
+              <!-- Cards Graphic Visual -->
+              <div class="flex justify-center items-center my-auto z-10">
+                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-xl border border-white/40 flex items-center justify-center text-3xl shadow-inner">
+                  🃏
+                </div>
+              </div>
+
+              <!-- Footer Badge -->
+              <div class="text-center z-10">
+                <span class="bg-black/60 backdrop-blur-sm px-2.5 py-0.5 rounded-md text-[11px] font-semibold text-slate-100 border border-white/20">
+                  Point & Pool
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Call Break -->
+          <div onclick="showToast('Call Break Lobby Ready')" class="relative bg-gradient-to-br from-purple-500 via-indigo-600 to-blue-800 rounded-2xl p-0.5 shadow-lg overflow-hidden group cursor-pointer transform active:scale-95 transition">
+            <div class="bg-gradient-to-b from-purple-800 to-indigo-950 rounded-[14px] p-3 text-white h-44 flex flex-col justify-between relative overflow-hidden">
+              
+              <!-- NEW Badge -->
+              <div class="absolute top-0 left-0 bg-amber-400 text-slate-900 font-black text-[10px] px-3 py-1 rounded-br-lg shadow uppercase tracking-wider z-20">
+                NEW
+              </div>
+
+              <!-- Graphic Header -->
+              <div class="z-10 text-center mt-3">
+                <div class="font-extrabold text-base text-purple-200 tracking-wide uppercase">
+                  CALL BREAK
+                </div>
+              </div>
+
+              <!-- Graphic Visual -->
+              <div class="flex justify-center items-center my-auto z-10">
+                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-xl border border-white/40 flex items-center justify-center text-3xl shadow-inner">
+                  ♠️
+                </div>
+              </div>
+
+              <!-- Bottom AI Badge -->
+              <div class="text-center z-10">
+                <span class="bg-slate-900/90 text-amber-300 px-2 py-0.5 rounded-md text-[10px] font-bold border border-amber-400/40 flex items-center justify-center gap-1">
+                  ✨ 24/7 AI Support
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- View 2: OPEN BATTLES / LUDO ARENA -->
+      <section id="battlesView" class="space-y-4 hidden">
+        
+        <!-- Top Controls: Create Battle -->
+        <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm flex items-center gap-2">
+          <input type="number" id="battleAmountInput" placeholder="Amount" class="flex-1 bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-800 font-medium">
+          <button onclick="createBattle()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-5 py-2 rounded-lg text-sm transition shadow-sm">
+            Set
+          </button>
+        </div>
+
+        <!-- Open Battles Header -->
+        <div class="flex items-center justify-center my-2">
+          <div class="h-[1px] bg-slate-300 flex-1"></div>
+          <span class="px-3 font-extrabold text-slate-800 text-sm tracking-wide uppercase flex items-center gap-1.5">
+            🏆 Open Battles (Classic) 🏆
+          </span>
+          <div class="h-[1px] bg-slate-300 flex-1"></div>
+        </div>
+
+        <!-- Battles List Container -->
+        <div id="battlesList" class="space-y-3">
+          <!-- Dynamic battle items injected via JS -->
+        </div>
+      </section>
+
+      <!-- View 3: WALLET PAGE -->
+      <section id="walletView" class="space-y-4 hidden">
+        
+        <!-- Wallet Navigation Top Bar -->
+        <div class="flex items-center justify-between pb-1">
+          <button onclick="navigateTo('home')" class="bg-indigo-900 text-white hover:bg-indigo-950 font-semibold px-4 py-1.5 rounded-lg text-sm flex items-center gap-1.5 shadow">
+            <i class="fa-solid fa-arrow-left"></i> Back
+          </button>
+          <button onclick="openModal('historyModal')" class="border border-slate-800 text-slate-800 hover:bg-slate-100 font-bold px-3 py-1.5 rounded-lg text-sm shadow-sm">
+            Wallet History
+          </button>
+        </div>
+
+        <!-- Deposit Chips Box -->
+        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+          <div class="bg-slate-50 border-b border-slate-200 py-2.5 px-4 text-center font-bold text-slate-800">
+            Deposit Chips
+          </div>
+          <div class="p-5 text-center space-y-3">
+            <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Chips</div>
+            <div id="depositChipsVal" class="text-3xl font-black text-slate-900">0</div>
+            <button onclick="openModal('depositModal')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 rounded-lg text-sm transition shadow">
+              Add
+            </button>
+          </div>
+        </div>
+
+        <!-- Winning Chips Box -->
+        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+          <div class="bg-slate-50 border-b border-slate-200 py-2.5 px-4 text-center font-bold text-slate-800">
+            Winning Chips
+          </div>
+          <div class="p-5 text-center space-y-3">
+            <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Chips</div>
+            <div id="winningChipsVal" class="text-3xl font-black text-slate-900">5</div>
+            <button onclick="openModal('withdrawModal')" class="w-full bg-indigo-900 hover:bg-indigo-950 text-white font-bold py-2.5 rounded-lg text-sm transition shadow">
+              Withdraw
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- View 4: SIMPLE POLICY VIEWS -->
+      <section id="policyView" class="space-y-4 hidden">
+        <div class="flex items-center justify-between border-b pb-2">
+          <h2 id="policyTitle" class="text-xl font-bold text-slate-900">Terms & Conditions</h2>
+          <button onclick="navigateTo('home')" class="text-xs font-bold text-slate-600 bg-slate-200 px-3 py-1 rounded-md">Back</button>
+        </div>
+        <div id="policyContent" class="text-sm text-slate-600 space-y-3 leading-relaxed">
+          <!-- Policy Text loaded dynamically -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Floating Support Actions (WhatsApp & Telegram & AI Floating Widget) -->
+    <div class="fixed bottom-3 right-4 z-20 flex flex-col items-end gap-2 max-w-[420px]">
+      
+      <!-- 24/7 AI Support Badge Floating Button -->
+      <button onclick="toggleAIChat()" class="bg-slate-900 text-amber-300 border border-amber-400 px-3 py-1.5 rounded-full shadow-lg text-xs font-bold flex items-center gap-1.5 hover:scale-105 transition transform">
+        <span>✨ 24/7 AI Support</span>
+      </button>
+
+      <!-- Circular Avatar Widget Icon -->
+      <div class="flex flex-col gap-2">
+        <!-- Telegram Button -->
+        <a href="https://t.me" target="_blank" class="w-10 h-10 bg-sky-500 text-white rounded-xl shadow-md flex items-center justify-center text-xl hover:bg-sky-600 transition">
+          <i class="fa-brands fa-telegram"></i>
+        </a>
+        <!-- WhatsApp Button -->
+        <a href="https://wa.me" target="_blank" class="w-10 h-10 bg-emerald-500 text-white rounded-xl shadow-md flex items-center justify-center text-xl hover:bg-emerald-600 transition">
+          <i class="fa-brands fa-whatsapp"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- SIDEBAR DRAWER MENU OVERLAY -->
+    <div id="sidebarOverlay" onclick="toggleSidebar(false)" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden transition-opacity"></div>
+    
+    <!-- SIDEBAR DRAWER MENU CONTAINER -->
+    <aside id="sidebar" class="fixed top-0 left-0 w-72 h-full bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col">
+      
+      <!-- Sidebar Header -->
+      <div class="bg-slate-900 text-white p-4 flex items-center justify-between">
+        <h3 class="font-extrabold text-base tracking-wide">AKPLAYERS</h3>
+        <button onclick="toggleSidebar(false)" class="text-slate-300 hover:text-white text-xl">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- User Profile Card in Sidebar -->
+      <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+        <div>
+          <div class="text-2xl font-black text-slate-900 flex items-center gap-1.5">
+            Ashik <span class="text-lg">👋</span>
+          </div>
+        </div>
+        <!-- Profile Avatar Icon -->
+        <div class="w-12 h-12 bg-rose-100 text-rose-500 border-2 border-rose-300 rounded-full flex items-center justify-center text-2xl shadow-sm">
+          <i class="fa-solid fa-user-ninja"></i>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex-1 overflow-y-auto py-2">
+        <ul class="space-y-1 px-3 text-slate-800 font-semibold text-sm">
+          
+          <li>
+            <button onclick="navigateTo('home'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
+              <span class="flex items-center gap-3"><i class="fa-solid fa-dice text-slate-700 w-5"></i> Play</span>
+              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+            </button>
+          </li>
+
+          <li>
+            <button onclick="navigateTo('wallet'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
+              <span class="flex items-center gap-3"><i class="fa-solid fa-wallet text-slate-700 w-5"></i> Wallet</span>
+              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+            </button>
+          </li>
+
+          <li>
+            <button onclick="openModal('historyModal'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
+              <span class="flex items-center gap-3"><i class="fa-solid fa-clock-rotate-left text-slate-700 w-5"></i> History</span>
+              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+            </button>
+          </li>
+
+          <li>
+            <button onclick="showToast('Profile Updated'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
+              <span class="flex items-center gap-3"><i class="fa-solid fa-user-group text-slate-700 w-5"></i> Profile</span>
+              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+            </button>
+          </li>
+
+          <li>
+            <button onclick="openModal('referModal'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
+              <span class="flex items-center gap-3"><i class="fa-solid fa-gift text-slate-700 w-5"></i> Refer & Earn</span>
+              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+            </button>
+          </li>
+
+          <hr class="my-2 border-slate-100">
+
+          <li>
+            <button onclick="openPolicy('Terms'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
+              <span class="flex items-center gap-3"><i class="fa-solid fa-shield-halved text-slate-700 w-5"></i> Term & Conditions</span>
+              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+            </button>
+          </li>
+
+          <li>
+            <button onclick="openPolicy('GST'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
+              <span class="flex items-center gap-3"><i class="fa-solid fa-file-invoice text-slate-700 w-5"></i> GST Policy</span>
+              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+            </button>
+          </li>
+
+          <li>
+            <button onclick="openPolicy('Privacy'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
+              <span class="flex items-center gap-3"><i class="fa-solid fa-lock text-slate-700 w-5"></i> Privacy Policy</span>
+              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+            </button>
+          </li>
+
+          <li>
+            <button onclick="openPolicy('Refund'); toggleSidebar(false);" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-100 transition">
+              <span class="flex items-center gap-3"><i class="fa-solid fa-circle-exclamation text-slate-700 w-5"></i> Refund Policy</span>
+              <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+            </button>
+          </li>
+
+        </ul>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="p-3 bg-slate-50 text-center border-t border-slate-200 text-xs text-slate-500 font-medium">
+        Akplayers v2.4 • Safe & Secure
+      </div>
+    </aside>
+
+    <!-- MODAL 1: RULES MODAL -->
+    <div id="rulesModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl relative">
+        <button onclick="closeModal('rulesModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h3 class="text-xl font-bold text-slate-900 border-b pb-2 flex items-center gap-2">
+          <i class="fa-solid fa-book-open text-amber-500"></i> Platform Rules
+        </h3>
+        <div class="text-xs text-slate-600 space-y-2.5 max-h-80 overflow-y-auto leading-relaxed">
+          <p class="p-2 bg-amber-50 text-amber-900 rounded-lg border border-amber-200 font-medium">
+            1. Single account per player allowed. Multiple accounts will lead to permanent ban.
+          </p>
+          <p class="p-2 bg-slate-50 text-slate-800 rounded-lg border border-slate-200">
+            2. Commission fee of 5% is deducted from winning total of each battle.
+          </p>
+          <p class="p-2 bg-slate-50 text-slate-800 rounded-lg border border-slate-200">
+            3. Screenshot of game result must be uploaded after match completion within 15 mins.
+          </p>
+          <p class="p-2 bg-slate-50 text-slate-800 rounded-lg border border-slate-200">
+            4. Referral code bonus of 2% is awarded directly to deposit wallet upon referred player match win.
+          </p>
+        </div>
+        <button onclick="closeModal('rulesModal')" class="w-full bg-slate-900 text-white font-bold py-2 rounded-xl text-sm">
+          Got It
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL 2: DEPOSIT MODAL -->
+    <div id="depositModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl relative">
+        <button onclick="closeModal('depositModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h3 class="text-xl font-bold text-slate-900 border-b pb-2">Deposit Chips</h3>
+        
+        <div class="space-y-3">
+          <label class="block text-xs font-bold text-slate-600 uppercase">Enter Amount (₹)</label>
+          <input type="number" id="depositAmount" placeholder="e.g. 100" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 font-bold">
+          
+          <div class="grid grid-cols-3 gap-2 pt-1">
+            <button onclick="setDepositValue(100)" class="border border-slate-300 py-1 rounded text-xs font-bold hover:bg-slate-100">+100</button>
+            <button onclick="setDepositValue(250)" class="border border-slate-300 py-1 rounded text-xs font-bold hover:bg-slate-100">+250</button>
+            <button onclick="setDepositValue(500)" class="border border-slate-300 py-1 rounded text-xs font-bold hover:bg-slate-100">+500</button>
+          </div>
+
+          <div class="p-3 bg-indigo-50 border border-indigo-100 rounded-xl space-y-2 text-center">
+            <span class="text-xs text-indigo-900 font-semibold">Pay via UPI / QR Code</span>
+            <div class="bg-white p-2 border border-dashed border-indigo-300 rounded-lg inline-block">
+              <i class="fa-solid fa-qrcode text-5xl text-slate-800"></i>
+            </div>
+            <p class="text-[11px] text-slate-500">Scan QR or tap below to instant add</p>
+          </div>
+        </div>
+
+        <button onclick="handleDeposit()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-sm transition shadow">
+          Pay & Add Chips
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL 3: WITHDRAW MODAL -->
+    <div id="withdrawModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl relative">
+        <button onclick="closeModal('withdrawModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h3 class="text-xl font-bold text-slate-900 border-b pb-2">Withdraw Chips</h3>
+        
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Enter Chips Amount</label>
+            <input type="number" id="withdrawAmount" placeholder="Min 5 Chips" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 font-bold">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">UPI ID / Mobile Number</label>
+            <input type="text" id="upiDetails" placeholder="username@upi or 9876543210" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600">
+          </div>
+
+          <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs text-slate-500">
+            ⚡ Instant Payouts processed directly to your PhonePe / GooglePay / Paytm UPI.
+          </div>
+        </div>
+
+        <button onclick="handleWithdraw()" class="w-full bg-indigo-900 hover:bg-indigo-950 text-white font-bold py-2.5 rounded-xl text-sm transition shadow">
+          Submit Withdrawal Request
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL 4: REFER & EARN MODAL -->
+    <div id="referModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl relative text-center">
+        <button onclick="closeModal('referModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="w-16 h-16 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center text-3xl mx-auto shadow-inner">
+          <i class="fa-solid fa-gift"></i>
+        </div>
+        <h3 class="text-xl font-bold text-slate-900">Refer & Earn 2%</h3>
+        <p class="text-xs text-slate-600">
+          Share your referral link with friends and earn 2% commission on every game played by your friends forever!
+        </p>
+
+        <div class="bg-slate-100 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+          <span class="text-xs font-mono font-bold text-slate-700">AKPLAYERS-ASHIK88</span>
+          <button onclick="copyToClipboard('AKPLAYERS-ASHIK88')" class="bg-slate-900 text-white text-xs px-3 py-1 rounded font-bold hover:bg-slate-800">
+            Copy
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 5: WALLET HISTORY MODAL -->
+    <div id="historyModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-2xl relative">
+        <button onclick="closeModal('historyModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h3 class="text-lg font-bold text-slate-900 border-b pb-2">Wallet History</h3>
+        
+        <div id="historyList" class="space-y-2 max-h-60 overflow-y-auto text-xs">
+          <!-- History items injected dynamically -->
+        </div>
+
+        <button onclick="closeModal('historyModal')" class="w-full bg-slate-200 text-slate-800 font-bold py-2 rounded-lg text-sm">
+          Close
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL 6: AI CHAT SUPPORT -->
+    <div id="aiChatModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl max-w-sm w-full h-[420px] flex flex-col shadow-2xl relative overflow-hidden">
+        <div class="bg-slate-900 text-white p-3 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-amber-400 rounded-full flex items-center justify-center text-slate-900 text-xs font-bold">✨</div>
+            <span class="font-bold text-sm">24/7 AI Support</span>
+          </div>
+          <button onclick="toggleAIChat()" class="text-slate-300 hover:text-white">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div id="aiChatMessages" class="flex-1 p-3 overflow-y-auto space-y-2 text-xs">
+          <div class="bg-slate-100 p-2.5 rounded-xl max-w-[80%] text-slate-800">
+            Namaste Ashik! How can I help you today with Akplayers games or payments?
+          </div>
+        </div>
+
+        <div class="p-2 border-t border-slate-200 flex gap-1.5">
+          <input type="text" id="aiInput" placeholder="Type your question..." class="flex-1 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none">
+          <button onclick="sendAIMessage()" class="bg-slate-900 text-white font-bold px-3 py-1.5 rounded-lg text-xs">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION BOX -->
+    <div id="toast" class="fixed bottom-16 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-full shadow-2xl z-50 hidden opacity-0 transition-all duration-300">
+      Toast notification message
+    </div>
+
+  </div>
+
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
+  <script>
+    // State Management
+    let depositChips = 0;
+    let winningChips = 5;
+    
+    // Sample Battle Data matching screenshot exact styles
+    let battles = [
+      { id: 1, p1: 'Om_Pr...', p2: 'Sahil...', amount: 50, avatar1: '👩', avatar2: '👩' },
+      { id: 2, p1: 'Mursa...', p2: 'Juber...', amount: 50, avatar1: '👩', avatar2: '🧑' },
+      { id: 3, p1: 'hunte...', p2: 'Payle...', amount: 350, avatar1: '👩', avatar2: '👩' },
+      { id: 4, p1: 'King_...', p2: 'Dhana...', amount: 2200, avatar1: '👨', avatar2: '👩' },
+      { id: 5, p1: 'Wasee...', p2: 'Arsha...', amount: 600, avatar1: '👨', avatar2: '👩' },
+      { id: 6, p1: 'kisor...', p2: 'HARIO...', amount: 100, avatar1: '👩', avatar2: '👨' }
+    ];
+
+    let walletHistory = [
+      { type: 'Bonus', amount: '+5 Chips', time: 'Just Now', status: 'Success' },
+      { type: 'Welcome Reward', amount: '+10 Chips', time: 'Yesterday', status: 'Success' }
+    ];
+
+    // Toggle Sidebar Navigation Drawer
+    function toggleSidebar(show) {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      if (show) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    // View Navigation Router
+    function navigateTo(viewName) {
+      const home = document.getElementById('homeView');
+      const battlesView = document.getElementById('battlesView');
+      const walletView = document.getElementById('walletView');
+      const policyView = document.getElementById('policyView');
+
+      home.classList.add('hidden');
+      battlesView.classList.add('hidden');
+      walletView.classList.add('hidden');
+      policyView.classList.add('hidden');
+
+      if (viewName === 'home') home.classList.remove('hidden');
+      if (viewName === 'battles') {
+        battlesView.classList.remove('hidden');
+        renderBattles();
+      }
+      if (viewName === 'wallet') {
+        walletView.classList.remove('hidden');
+        updateWalletUI();
+      }
+    }
+
+    // Modal Control Functions
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    // Copy to Clipboard Utility
+    function copyToClipboard(text) {
+      const tempInput = document.createElement('input');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      showToast('Copied to Clipboard!');
+    }
+
+    // Toast Alert Notification
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.innerText = message;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.remove('opacity-0'), 10);
+      setTimeout(() => {
+        toast.classList.add('opacity-0');
+        setTimeout(() => toast.classList.add('hidden'), 300);
+      }, 2500);
+    }
+
+    // Update Wallet Balances across UI
+    function updateWalletUI() {
+      const totalChips = depositChips + winningChips;
+      document.getElementById('headerBalance').innerText = totalChips;
+      document.getElementById('depositChipsVal').innerText = depositChips;
+      document.getElementById('winningChipsVal').innerText = winningChips;
+      renderHistory();
+    }
+
+    // Render Battles List
+    function renderBattles() {
+      const list = document.getElementById('battlesList');
+      list.innerHTML = '';
+
+      battles.forEach(battle => {
+        const battleCard = document.createElement('div');
+        battleCard.className = "bg-white border border-slate-200 rounded-2xl p-3.5 shadow-sm flex items-center justify-between";
+        battleCard.innerHTML = `
+          <!-- Player 1 -->
+          <div class="flex items-center gap-2 w-1/3">
+            <div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-sm shadow-sm">
+              ${battle.avatar1}
+            </div>
+            <span class="font-bold text-xs text-slate-800 truncate">${battle.p1}</span>
+          </div>
+
+          <!-- Center VS & Amount -->
+          <div class="flex flex-col items-center justify-center w-1/3">
+            <div class="text-amber-600 font-extrabold text-sm italic tracking-widest flex items-center gap-1">
+              <span class="text-slate-400">V</span><span class="text-amber-500">S</span>
+            </div>
+            <div class="text-emerald-700 font-black text-sm mt-0.5">
+              Rs ${battle.amount}
+            </div>
+          </div>
+
+          <!-- Player 2 / Join -->
+          <div class="flex items-center justify-end gap-2 w-1/3">
+            <span class="font-bold text-xs text-slate-800 truncate text-right">${battle.p2}</span>
+            <div class="w-8 h-8 rounded-full bg-cyan-100 flex items-center justify-center text-sm shadow-sm">
+              ${battle.avatar2}
+            </div>
+          </div>
+        `;
+        list.appendChild(battleCard);
+      });
+    }
+
+    // Create New Battle Event
+    function createBattle() {
+      const input = document.getElementById('battleAmountInput');
+      const val = parseInt(input.value);
+
+      if (!val || val < 10) {
+        showToast('Minimum battle amount is Rs 10');
+        return;
+      }
+
+      if (depositChips + winningChips < val) {
+        showToast('Insufficient wallet chips! Please add chips.');
+        openModal('depositModal');
+        return;
+      }
+
+      // Deduct chips from wallet
+      if (depositChips >= val) {
+        depositChips -= val;
+      } else {
+        const rem = val - depositChips;
+        depositChips = 0;
+        winningChips -= rem;
+      }
+
+      battles.unshift({
+        id: Date.now(),
+        p1: 'Ashik',
+        p2: 'Waiting...',
+        amount: val,
+        avatar1: '🥷',
+        avatar2: '⏳'
+      });
+
+      walletHistory.unshift({
+        type: 'Battle Entry',
+        amount: `- ${val} Chips`,
+        time: 'Just Now',
+        status: 'Created'
+      });
+
+      input.value = '';
+      updateWalletUI();
+      renderBattles();
+      showToast('Battle Created Successfully!');
+    }
+
+    // Deposit Handling
+    function setDepositValue(val) {
+      document.getElementById('depositAmount').value = val;
+    }
+
+    function handleDeposit() {
+      const amountInput = document.getElementById('depositAmount');
+      const amount = parseInt(amountInput.value);
+
+      if (!amount || amount <= 0) {
+        showToast('Please enter a valid amount');
+        return;
+      }
+
+      depositChips += amount;
+      walletHistory.unshift({
+        type: 'Deposit UPI',
+        amount: `+${amount} Chips`,
+        time: 'Just Now',
+        status: 'Success'
+      });
+
+      amountInput.value = '';
+      closeModal('depositModal');
+      updateWalletUI();
+      showToast(`Added ${amount} Deposit Chips!`);
+    }
+
+    // Withdrawal Handling
+    function handleWithdraw() {
+      const amountInput = document.getElementById('withdrawAmount');
+      const upiInput = document.getElementById('upiDetails');
+      const amount = parseInt(amountInput.value);
+
+      if (!amount || amount < 5) {
+        showToast('Minimum withdrawal is 5 Chips');
+        return;
+      }
+      if (!upiInput.value.trim()) {
+        showToast('Please enter your UPI ID');
+        return;
+      }
+      if (winningChips < amount) {
+        showToast('Insufficient Winning Chips balance!');
+        return;
+      }
+
+      winningChips -= amount;
+      walletHistory.unshift({
+        type: 'Withdrawal Request',
+        amount: `-${amount} Chips`,
+        time: 'Just Now',
+        status: 'Pending'
+      });
+
+      amountInput.value = '';
+      closeModal('withdrawModal');
+      updateWalletUI();
+      showToast('Withdrawal Request Submitted Successfully!');
+    }
+
+    // Render Wallet History
+    function renderHistory() {
+      const container = document.getElementById('historyList');
+      container.innerHTML = '';
+
+      if (walletHistory.length === 0) {
+        container.innerHTML = '<div class="text-center text-slate-400 py-4">No transactions yet</div>';
+        return;
+      }
+
+      walletHistory.forEach(item => {
+        const el = document.createElement('div');
+        el.className = "flex items-center justify-between p-2.5 bg-slate-50 rounded-lg border border-slate-200";
+        el.innerHTML = `
+          <div>
+            <div class="font-bold text-slate-800">${item.type}</div>
+            <div class="text-[10px] text-slate-400">${item.time}</div>
+          </div>
+          <div class="text-right">
+            <div class="font-black ${item.amount.includes('+') ? 'text-emerald-600' : 'text-rose-600'}">${item.amount}</div>
+            <span class="text-[10px] font-semibold text-slate-500">${item.status}</span>
+          </div>
+        `;
+        container.appendChild(el);
+      });
+    }
+
+    // Policy Page Viewer
+    function openPolicy(type) {
+      const title = document.getElementById('policyTitle');
+      const content = document.getElementById('policyContent');
+
+      title.innerText = `${type} Policy`;
+
+      if (type === 'Terms') {
+        content.innerHTML = `
+          <p>Welcome to Akplayers. By using our platform, you agree to comply with our fair play policies, anti-cheat regulations, and withdrawal verification rules.</p>
+          <p>1. Players must be 18+ years of age to participate in real-chip matches.</p>
+          <p>2. Collusion or fraud will result in account cancellation without refund.</p>
+        `;
+      } else if (type === 'GST') {
+        content.innerHTML = `
+          <p>All deposits and prize pools adhere to standard online gaming regulations. GST components are handled transparently per transaction receipts.</p>
+        `;
+      } else if (type === 'Privacy') {
+        content.innerHTML = `
+          <p>Your user details, wallet addresses, and payment information are end-to-end encrypted. Akplayers never shares personal information with third parties.</p>
+        `;
+      } else if (type === 'Refund') {
+        content.innerHTML = `
+          <p>Deposits are added instantly to your wallet. In case of failed transaction debits from your bank without chip credit, refunds are processed within 24-48 business hours.</p>
+        `;
+      }
+
+      navigateTo('policy');
+    }
+
+    // Download App Action
+    function downloadApp() {
+      showToast('Akplayers APK Download Started!');
+    }
+
+    // AI Chat Floating Dialog Toggler
+    function toggleAIChat() {
+      const modal = document.getElementById('aiChatModal');
+      modal.classList.toggle('hidden');
+    }
+
+    // Send AI Chat Message
+    function sendAIMessage() {
+      const input = document.getElementById('aiInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chatBox = document.getElementById('aiChatMessages');
+      
+      // User message
+      const userMsg = document.createElement('div');
+      userMsg.className = "bg-slate-900 text-white p-2.5 rounded-xl max-w-[80%] ml-auto text-xs";
+      userMsg.innerText = text;
+      chatBox.appendChild(userMsg);
+
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // Automated AI Response simulation
+      setTimeout(() => {
+        const aiMsg = document.createElement('div');
+        aiMsg.className = "bg-slate-100 p-2.5 rounded-xl max-w-[80%] text-slate-800 text-xs";
+        
+        if (text.toLowerCase().includes('deposit') || text.toLowerCase().includes('add')) {
+          aiMsg.innerText = "To deposit chips, click on the Wallet button at the top right, then tap 'Add' in the Deposit Chips section.";
+        } else if (text.toLowerCase().includes('withdraw')) {
+          aiMsg.innerText = "You can withdraw winning chips instantly to your UPI ID from the Wallet page.";
+        } else {
+          aiMsg.innerText = "Thanks for reaching Akplayers support! Our support team is online 24/7 to help with game issues or withdrawals.";
+        }
+        
+        chatBox.appendChild(aiMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 600);
+    }
+
+    // Initial Load setup
+    window.onload = function() {
+      updateWalletUI();
+      renderBattles();
+    };
+  </script>
 </body>
 </html>

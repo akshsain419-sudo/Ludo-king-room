@@ -1,452 +1,162 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akplayers - Gaming Platform</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Poppins', sans-serif; background-color: #f1f5f9; }
-        .app-gradient { background: linear-gradient(135deg, #ff416c, #ff4b2b); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MKG Players - Online Ludo</title>
+  <meta name="theme-color" content="#10152c">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #10152c;
+      color: white;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px;
+      background: #191f3d;
+      border-bottom: 1px solid #303959;
+    }
+    .logo { font-size: 22px; font-weight: bold; }
+    .logo span { color: #ffcb45; }
+    button {
+      cursor: pointer;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 15px;
+      font-weight: bold;
+    }
+    .login { background: #ffcb45; color: #16182c; }
+    main { max-width: 600px; margin: auto; padding: 22px 16px; }
+    .hero {
+      text-align: center;
+      padding: 28px 15px;
+      background: linear-gradient(140deg,#263c79,#572d82);
+      border-radius: 18px;
+    }
+    .hero h1 { font-size: 29px; margin: 0 0 12px; }
+    .hero p { color: #e1e5ff; line-height: 1.6; }
+    .primary { background: #ffcb45; color: #17172c; width: 100%; }
+    .section-title { margin: 28px 0 14px; }
+    .games {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .game {
+      background: #1c2343;
+      border: 1px solid #343e65;
+      border-radius: 15px;
+      padding: 20px 12px;
+      text-align: center;
+    }
+    .game .emoji { font-size: 42px; }
+    .game h3 { margin: 10px 0; }
+    .game p { color: #c1c9e8; font-size: 13px; }
+    .secondary {
+      background: #30395f;
+      color: white;
+      width: 100%;
+    }
+    .notice {
+      color: #b8c2e2;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 25px;
+    }
+    footer {
+      text-align: center;
+      color: #9ea8cc;
+      padding: 24px 12px;
+      font-size: 13px;
+    }
+    #message {
+      display: none;
+      background: #25345b;
+      padding: 14px;
+      margin-top: 15px;
+      border-radius: 10px;
+      line-height: 1.5;
+    }
+  </style>
 </head>
-<body class="bg-slate-100 text-slate-800 antialiased">
+<body>
+  <header>
+    <div class="logo">MKG <span>PLAYERS</span></div>
+    <button class="login" onclick="showLogin()">Login</button>
+  </header>
 
-    <!-- Top Banner -->
-    <div class="bg-rose-600 text-white text-xs py-2 px-3 text-center font-medium flex items-center justify-between shadow-sm">
-        <span>😍 Commission: 5% • Referral: 2% For All Games</span>
-        <button onclick="switchTab('admin')" class="bg-white text-rose-600 px-2 py-0.5 rounded font-bold uppercase text-[10px]">Admin Panel</button>
-    </div>
+  <main>
+    <section class="hero">
+      <h1>🎲 Play Ludo Online</h1>
+      <p>दोस्तों के साथ लूडो खेलें और अपना गेम रूम बनाएं।</p>
+      <button class="primary" onclick="showLogin()">
+        अभी शुरू करें
+      </button>
+    </section>
 
-    <!-- Header -->
-    <header class="bg-white sticky top-0 z-45 shadow-sm border-b border-slate-100">
-        <div class="max-w-md mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-slate-700 text-xl focus:outline-none">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-                <div class="flex items-center gap-2 cursor-pointer" onclick="switchTab('games')">
-                    <div class="w-9 h-9 rounded-full app-gradient flex items-center justify-center text-white shadow">
-                        <i class="fa-solid fa-gamepad text-base"></i>
-                    </div>
-                    <span class="font-extrabold text-lg bg-gradient-to-r from-rose-600 to-orange-500 bg-clip-text text-transparent">Akplayers</span>
-                </div>
-            </div>
+    <h2 class="section-title">🎮 Game Modes</h2>
+    <section class="games">
+      <div class="game">
+        <div class="emoji">🎲</div>
+        <h3>Classic Ludo</h3>
+        <p>क्लासिक लूडो गेम</p>
+        <button class="secondary" onclick="roomInfo()">
+          Play Now
+        </button>
+      </div>
 
-            <div class="flex items-center gap-2">
-                <button onclick="alert('Download APK feature active')" class="bg-emerald-50 text-emerald-600 border border-emerald-200 p-2 rounded-xl text-xs font-semibold">
-                    <i class="fa-solid fa-download"></i>
-                </button>
-                <div onclick="switchTab('wallet')" class="bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl flex items-center gap-2 cursor-pointer">
-                    <i class="fa-solid fa-wallet text-amber-500"></i>
-                    <span id="header-chips" class="font-bold text-sm">5</span>
-                </div>
-            </div>
-        </div>
-    </header>
+      <div class="game">
+        <div class="emoji">👥</div>
+        <h3>Private Room</h3>
+        <p>दोस्तों के साथ खेलें</p>
+        <button class="secondary" onclick="roomInfo()">
+          Room Code
+        </button>
+      </div>
+    </section>
 
-    <!-- Notice -->
-    <div class="max-w-md mx-auto px-4 mt-3">
-        <div class="bg-amber-50 border-l-4 border-amber-400 p-2.5 rounded-r-xl text-xs text-amber-900 flex items-start gap-2">
-            <i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5"></i>
-            <p><strong>Notice:</strong> सभी प्लेयर्स live Chat पर मैसेज करे whatsApp पर कोई मैसेज ना करे</p>
-        </div>
-    </div>
+    <div id="message" role="status"></div>
 
-    <!-- Main Content Container -->
-    <main class="max-w-md mx-auto px-4 py-4 mb-24" id="main-container">
-        
-        <!-- 1. GAMES TAB -->
-        <div id="tab-games" class="space-y-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-base font-bold text-slate-800">Games</h2>
-                <button onclick="alert('1. Record gameplay video.\n2. Upload valid screenshot.')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-600">
-                    <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Rules
-                </button>
-            </div>
+    <p class="notice">
+      यह वेबसाइट शुरुआती फ्रंटएंड नमूना है।
+      Login, OTP verification, multiplayer rooms और
+      server/database अभी जुड़े नहीं हैं।
+      किसी वास्तविक भुगतान या नकद गेम के लिए
+      पहले लागू कानूनों और आवश्यक अनुमतियों की जाँच करें।
+    </p>
+  </main>
 
-            <div class="grid grid-cols-2 gap-3">
-                <div onclick="openBattles('Ludo Classic')" class="relative rounded-2xl overflow-hidden shadow cursor-pointer bg-gradient-to-br from-blue-600 to-indigo-800 p-3 text-white">
-                    <div class="absolute top-2 right-2 bg-amber-400 text-slate-900 text-[9px] font-bold px-2 py-0.5 rounded-full">Classic</div>
-                    <div class="py-3 text-center">
-                        <i class="fa-solid fa-dice text-3xl mb-2 text-amber-300"></i>
-                        <h3 class="font-bold text-sm">LUDO CLASSIC</h3>
-                        <p class="text-[10px] text-blue-100 mt-1">₹50 - ₹10,000</p>
-                    </div>
-                </div>
+  <footer>
+    © 2026 MKG Players · All Rights Reserved
+  </footer>
 
-                <div onclick="openBattles('Snake & Ladders')" class="relative rounded-2xl overflow-hidden shadow cursor-pointer bg-gradient-to-br from-emerald-600 to-teal-800 p-3 text-white">
-                    <div class="absolute top-2 right-2 bg-amber-400 text-slate-900 text-[9px] font-bold px-2 py-0.5 rounded-full">NEW</div>
-                    <div class="py-3 text-center">
-                        <i class="fa-solid fa-chess-board text-3xl mb-2 text-amber-300"></i>
-                        <h3 class="font-bold text-sm">SNAKE & LADDERS</h3>
-                        <p class="text-[10px] text-emerald-100 mt-1">₹50 - ₹5,000</p>
-                    </div>
-                </div>
+  <script>
+    function notify(text) {
+      const box = document.getElementById("message");
+      box.textContent = text;
+      box.style.display = "block";
+    }
 
-                <div onclick="openBattles('Rummy')" class="relative rounded-2xl overflow-hidden shadow cursor-pointer bg-gradient-to-br from-red-600 to-rose-800 p-3 text-white">
-                    <div class="absolute top-2 right-2 bg-amber-400 text-slate-900 text-[9px] font-bold px-2 py-0.5 rounded-full">NEW</div>
-                    <div class="py-3 text-center">
-                        <i class="fa-solid fa-clone text-3xl mb-2 text-amber-300"></i>
-                        <h3 class="font-bold text-sm">RUMMY</h3>
-                        <p class="text-[10px] text-red-100 mt-1">₹100 - ₹10,000</p>
-                    </div>
-                </div>
+    function showLogin() {
+      notify(
+        "लॉगिन सेवा अभी सेटअप नहीं हुई है। " +
+        "वास्तविक OTP के लिए सुरक्षित सर्वर और SMS सेवा जोड़नी होगी।"
+      );
+    }
 
-                <div onclick="openBattles('Call Break')" class="relative rounded-2xl overflow-hidden shadow cursor-pointer bg-gradient-to-br from-purple-600 to-indigo-900 p-3 text-white">
-                    <div class="absolute top-2 right-2 bg-amber-400 text-slate-900 text-[9px] font-bold px-2 py-0.5 rounded-full">AI Support</div>
-                    <div class="py-3 text-center">
-                        <i class="fa-solid fa-layer-group text-3xl mb-2 text-amber-300"></i>
-                        <h3 class="font-bold text-sm">CALL BREAK</h3>
-                        <p class="text-[10px] text-purple-100 mt-1">₹50 - ₹5,000</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. BATTLES TAB -->
-        <div id="tab-battles" class="hidden space-y-4">
-            <div class="flex items-center justify-between">
-                <button onclick="switchTab('games')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-600">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> Back
-                </button>
-                <h2 id="battle-game-title" class="text-sm font-bold text-slate-800">Open Battles</h2>
-                <button onclick="openModal('create-battle-modal')" class="bg-rose-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow">
-                    + Create
-                </button>
-            </div>
-
-            <div class="bg-white p-3 rounded-xl border border-slate-200 flex gap-2">
-                <input type="number" id="battle-amount-input" placeholder="Amount (e.g. 50)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-rose-500">
-                <button onclick="createCustomBattle()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-semibold">Set</button>
-            </div>
-
-            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
-                <span class="text-[11px] font-bold text-slate-400 uppercase">🏆 Open Battles</span>
-                <span id="active-battle-count" class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">0 Active</span>
-            </div>
-
-            <div id="battles-list-container" class="space-y-3"></div>
-        </div>
-
-        <!-- 3. WALLET TAB -->
-        <div id="tab-wallet" class="hidden space-y-4">
-            <div class="flex items-center justify-between">
-                <button onclick="switchTab('games')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-600">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> Back
-                </button>
-                <h2 class="text-sm font-bold text-slate-800">My Wallet</h2>
-                <button onclick="switchTab('history')" class="text-xs text-rose-600 font-bold">History</button>
-            </div>
-
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
-                <div class="text-[11px] font-bold text-slate-400 uppercase">Deposit Chips</div>
-                <div class="text-2xl font-black text-slate-800" id="wallet-deposit-balance">0</div>
-                <button onclick="openModal('deposit-modal')" class="w-full bg-slate-900 text-white font-bold py-2.5 rounded-xl text-xs">Add via UPI QR</button>
-            </div>
-
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
-                <div class="text-[11px] font-bold text-slate-400 uppercase">Winning Chips</div>
-                <div class="text-2xl font-black text-emerald-600" id="wallet-winning-balance">5</div>
-                <button onclick="openModal('withdraw-modal')" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-xl text-xs">Withdraw Winnings</button>
-            </div>
-        </div>
-
-        <!-- 4. HISTORY TAB -->
-        <div id="tab-history" class="hidden space-y-4">
-            <div class="flex items-center justify-between">
-                <button onclick="switchTab('wallet')" class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-lg font-semibold text-slate-600">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> Back
-                </button>
-                <h2 class="text-sm font-bold text-slate-800">History</h2>
-                <div></div>
-            </div>
-            <div id="history-list-container" class="space-y-2"></div>
-        </div>
-
-        <!-- 5. PROFILE TAB -->
-        <div id="tab-profile" class="hidden space-y-4">
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 text-center space-y-3">
-                <div class="w-16 h-16 bg-rose-100 rounded-full mx-auto flex items-center justify-center text-rose-600 text-2xl font-bold">A</div>
-                <div>
-                    <h3 class="font-bold text-base">Ashik</h3>
-                    <p class="text-xs text-slate-400">+91 9876543210</p>
-                </div>
-            </div>
-            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden divide-y divide-slate-100 text-xs font-medium">
-                <div onclick="alert('Terms & Conditions apply.')" class="p-3.5 flex justify-between items-center cursor-pointer"><span>Term & Conditions</span><i class="fa-solid fa-chevron-right text-slate-400"></i></div>
-                <div onclick="alert('GST Policy as per laws.')" class="p-3.5 flex justify-between items-center cursor-pointer"><span>GST Policy</span><i class="fa-solid fa-chevron-right text-slate-400"></i></div>
-                <div onclick="alert('Privacy is secured.')" class="p-3.5 flex justify-between items-center cursor-pointer"><span>Privacy Policy</span><i class="fa-solid fa-chevron-right text-slate-400"></i></div>
-            </div>
-        </div>
-
-        <!-- 6. ADMIN PANEL TAB -->
-        <div id="tab-admin" class="hidden space-y-4">
-            <div class="bg-slate-900 text-white p-3.5 rounded-xl flex items-center justify-between shadow">
-                <div>
-                    <h2 class="text-xs font-extrabold uppercase"><i class="fa-solid fa-shield-halved text-rose-500 mr-1"></i> Admin Dashboard</h2>
-                    <p class="text-[10px] text-slate-400">Manage Deposits & Battles</p>
-                </div>
-                <button onclick="switchTab('games')" class="text-xs bg-slate-800 px-3 py-1.5 rounded text-slate-200 font-bold border border-slate-700">Exit</button>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-xs">
-                    <span class="text-[10px] text-slate-400 font-bold uppercase">Pending Deposits</span>
-                    <div id="admin-pending-count" class="text-xl font-black text-rose-600 mt-1">0</div>
-                </div>
-                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-xs">
-                    <span class="text-[10px] text-slate-400 font-bold uppercase">Pending Withdrawals</span>
-                    <div id="admin-withdraw-count" class="text-xl font-black text-amber-600 mt-1">0</div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
-                <h3 class="font-bold text-xs text-slate-700 uppercase border-b border-slate-100 pb-2">📥 UPI Deposit Requests</h3>
-                <div id="admin-deposit-list" class="space-y-2"></div>
-            </div>
-
-            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
-                <h3 class="font-bold text-xs text-slate-700 uppercase border-b border-slate-100 pb-2">⚔️ Live Battles Control</h3>
-                <div id="admin-battles-list" class="space-y-2"></div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Sidebar Drawer -->
-    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-50 hidden"></div>
-    <div id="sidebar-drawer" class="fixed top-0 left-0 bottom-0 w-64 bg-white z-50 shadow-2xl transform -translate-x-full transition-transform duration-300 flex flex-col">
-        <div class="p-4 app-gradient text-white flex items-center justify-between">
-            <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-full bg-white text-rose-600 flex items-center justify-center font-bold text-base">A</div>
-                <div>
-                    <h3 class="font-bold text-xs">Ashik</h3>
-                    <p class="text-[10px] text-rose-100">+91 9876543210</p>
-                </div>
-            </div>
-            <button onclick="toggleSidebar()" class="text-white text-base"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-        <div class="flex-1 py-2 divide-y divide-slate-100 text-xs font-semibold">
-            <div onclick="switchTab('games'); toggleSidebar();" class="p-3.5 flex items-center gap-3 cursor-pointer"><i class="fa-solid fa-dice text-rose-500 w-4"></i> Play Games</div>
-            <div onclick="switchTab('wallet'); toggleSidebar();" class="p-3.5 flex items-center gap-3 cursor-pointer"><i class="fa-solid fa-wallet text-amber-500 w-4"></i> Wallet</div>
-            <div onclick="switchTab('history'); toggleSidebar();" class="p-3.5 flex items-center gap-3 cursor-pointer"><i class="fa-solid fa-clock-rotate-left text-blue-500 w-4"></i> History</div>
-            <div onclick="switchTab('profile'); toggleSidebar();" class="p-3.5 flex items-center gap-3 cursor-pointer"><i class="fa-solid fa-user text-purple-500 w-4"></i> Profile</div>
-            <div onclick="switchTab('admin'); toggleSidebar();" class="p-3.5 flex items-center gap-3 cursor-pointer text-rose-600 bg-rose-50/50"><i class="fa-solid fa-shield-halved w-4"></i> Admin Panel</div>
-        </div>
-    </div>
-
-    <!-- Modals -->
-    <div id="deposit-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-xs w-full p-5 shadow-2xl space-y-3">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
-                <h3 class="font-bold text-xs">Deposit Chips via UPI</h3>
-                <button onclick="closeModal('deposit-modal')" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="text-center space-y-2">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=upi://pay?pa=akplayers@upi&pn=Akplayers" alt="QR" class="w-32 h-32 mx-auto rounded">
-                <div class="text-[10px] text-slate-500">Pay to UPI: <strong class="text-slate-700">akplayers@upi</strong></div>
-            </div>
-            <div class="space-y-2 text-xs">
-                <input type="number" id="deposit-amt-input" placeholder="Amount Paid (₹)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-                <input type="text" id="deposit-utr-input" placeholder="12-Digit UTR Number" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-                <button onclick="submitDepositRequest()" class="w-full bg-rose-600 text-white font-bold py-2.5 rounded-lg">Submit Request</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="withdraw-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-xs w-full p-5 shadow-2xl space-y-3">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
-                <h3 class="font-bold text-xs">Withdraw Winnings</h3>
-                <button onclick="closeModal('withdraw-modal')" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="space-y-2 text-xs">
-                <input type="text" id="withdraw-upi-input" placeholder="Your UPI ID (e.g. name@oksbi)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-                <input type="number" id="withdraw-amt-input" placeholder="Amount to Withdraw" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-                <button onclick="submitWithdrawRequest()" class="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-lg">Request Payout</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="create-battle-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-xs w-full p-5 shadow-2xl space-y-3">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
-                <h3 class="font-bold text-xs">Create Battle Room</h3>
-                <button onclick="closeModal('create-battle-modal')" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="space-y-2 text-xs">
-                <input type="number" id="new-battle-amount" placeholder="Battle Amount (₹)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-                <button onclick="confirmCreateBattle()" class="w-full bg-rose-600 text-white font-bold py-2.5 rounded-lg">Publish Battle</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScript Application Core -->
-    <script>
-        let currentUser = { name: "Ashik", depositChips: 0, winningChips: 5 };
-        let battles = [
-            { id: 1, game: 'Ludo Classic', creator: 'Om_Pr...', opponent: 'Sahil...', amount: 50, status: 'Open' },
-            { id: 2, game: 'Rummy', creator: 'hunte...', opponent: 'Payle...', amount: 350, status: 'Open' }
-        ];
-        let depositRequests = [{ id: 101, user: 'Ashik', amount: 500, utr: '328192831290', status: 'Pending' }];
-        let withdrawRequests = [];
-        let historyList = [{ type: 'Bonus', amount: '+5 Chips', date: '21 Oct, 08:30 AM', status: 'Success' }];
-        let selectedGameForBattles = 'Ludo Classic';
-
-        function updateUI() {
-            document.getElementById('header-chips').innerText = currentUser.winningChips + currentUser.depositChips;
-            document.getElementById('wallet-deposit-balance').innerText = currentUser.depositChips;
-            document.getElementById('wallet-winning-balance').innerText = currentUser.winningChips;
-
-            // Render Battles
-            const battleContainer = document.getElementById('battles-list-container');
-            const filtered = battles.filter(b => b.game === selectedGameForBattles);
-            document.getElementById('active-battle-count').innerText = `${filtered.length} Active`;
-
-            battleContainer.innerHTML = filtered.length === 0 ? 
-                `<div class="bg-white p-6 rounded-xl text-center text-slate-400 text-xs">No active battles. Create one!</div>` :
-                filtered.map(b => `
-                    <div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
-                        <div>
-                            <span class="font-bold">${b.creator} vs ${b.opponent}</span>
-                            <span class="block text-[10px] text-slate-400 uppercase">${b.status}</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="font-extrabold text-emerald-600 block">₹${b.amount}</span>
-                            ${b.status === 'Open' ? `<button onclick="joinBattle(${b.id})" class="mt-1 bg-emerald-600 text-white px-2.5 py-1 rounded font-bold text-[10px]">Join</button>` : `<span class="text-rose-500 font-bold text-[10px]">Running</span>`}
-                        </div>
-                    </div>
-                `).join('');
-
-            // Render History
-            document.getElementById('history-list-container').innerHTML = historyList.map(h => `
-                <div class="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center text-xs">
-                    <div><span class="font-bold">${h.type}</span><span class="block text-[10px] text-slate-400">${h.date}</span></div>
-                    <span class="font-extrabold ${h.amount.startsWith('+') ? 'text-emerald-600' : 'text-rose-600'}">${h.amount}</span>
-                </div>
-            `).join('');
-
-            // Admin Panel
-            document.getElementById('admin-pending-count').innerText = depositRequests.filter(d => d.status === 'Pending').length;
-            document.getElementById('admin-withdraw-count').innerText = withdrawRequests.filter(w => w.status === 'Pending').length;
-
-            document.getElementById('admin-deposit-list').innerHTML = depositRequests.filter(d => d.status === 'Pending').length === 0 ? 
-                `<p class="text-[11px] text-slate-400 text-center py-1">No pending deposits.</p>` :
-                depositRequests.map((d, i) => d.status === 'Pending' ? `
-                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs flex justify-between items-center">
-                        <div><strong class="block">${d.user} - ₹${d.amount}</strong><span class="text-[10px] text-slate-500">UTR: ${d.utr}</span></div>
-                        <button onclick="approveDeposit(${i})" class="bg-emerald-600 text-white px-2.5 py-1 rounded text-[10px] font-bold">Approve</button>
-                    </div>
-                ` : '').join('');
-
-            document.getElementById('admin-battles-list').innerHTML = battles.length === 0 ? 
-                `<p class="text-[11px] text-slate-400 text-center py-1">No active battles.</p>` :
-                battles.map((b, i) => `
-                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs flex justify-between items-center">
-                        <div><strong class="block">${b.game} (₹${b.amount})</strong><span class="text-[10px] text-slate-500">${b.creator} vs ${b.opponent}</span></div>
-                        <button onclick="adminDeclareWinner(${i})" class="bg-indigo-600 text-white px-2.5 py-1 rounded text-[10px] font-bold">Winner</button>
-                    </div>
-                `).join('');
-        }
-
-        function switchTab(tab) {
-            ['games', 'battles', 'wallet', 'history', 'profile', 'admin'].forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-            });
-            document.getElementById(`tab-${tab}`).classList.remove('hidden');
-            window.scrollTo(0, 0);
-            updateUI();
-        }
-
-        function toggleSidebar() {
-            document.getElementById('sidebar-drawer').classList.toggle('-translate-x-full');
-            document.getElementById('sidebar-overlay').classList.toggle('hidden');
-        }
-
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
-        function openBattles(game) {
-            selectedGameForBattles = game;
-            document.getElementById('battle-game-title').innerText = `${game} Battles`;
-            switchTab('battles');
-        }
-
-        function submitDepositRequest() {
-            let amt = parseInt(document.getElementById('deposit-amt-input').value);
-            let utr = document.getElementById('deposit-utr-input').value;
-            if(!amt || !utr) { alert('Enter valid amount and UTR'); return; }
-            depositRequests.push({ id: Date.now(), user: currentUser.name, amount: amt, utr: utr, status: 'Pending' });
-            closeModal('deposit-modal');
-            alert('Deposit request submitted successfully!');
-            updateUI();
-        }
-
-        function approveDeposit(index) {
-            depositRequests[index].status = 'Approved';
-            currentUser.depositChips += depositRequests[index].amount;
-            historyList.unshift({ type: 'Deposit Approved', amount: `+₹${depositRequests[index].amount}`, date: 'Just now', status: 'Success' });
-            alert('Deposit approved and chips added!');
-            updateUI();
-        }
-
-        function submitWithdrawRequest() {
-            let upi = document.getElementById('withdraw-upi-input').value;
-            let amt = parseInt(document.getElementById('withdraw-amt-input').value);
-            if(!upi || !amt || amt > currentUser.winningChips) { alert('Invalid input or insufficient balance'); return; }
-            currentUser.winningChips -= amt;
-            withdrawRequests.push({ id: Date.now(), user: currentUser.name, amount: amt, upi: upi, status: 'Pending' });
-            historyList.unshift({ type: 'Withdrawal', amount: `-₹${amt}`, date: 'Just now', status: 'Pending' });
-            closeModal('withdraw-modal');
-            alert('Withdrawal requested successfully!');
-            updateUI();
-        }
-
-        function createCustomBattle() {
-            let amt = parseInt(document.getElementById('battle-amount-input').value);
-            if(!amt) { alert('Enter amount'); return; }
-            battles.unshift({ id: Date.now(), game: selectedGameForBattles, creator: currentUser.name, opponent: 'Waiting...', amount: amt, status: 'Open' });
-            document.getElementById('battle-amount-input').value = '';
-            alert('Battle created!');
-            updateUI();
-        }
-
-        function confirmCreateBattle() {
-            let amt = parseInt(document.getElementById('new-battle-amount').value);
-            if(!amt) { alert('Enter amount'); return; }
-            battles.unshift({ id: Date.now(), game: selectedGameForBattles, creator: currentUser.name, opponent: 'Waiting...', amount: amt, status: 'Open' });
-            closeModal('create-battle-modal');
-            alert('Battle created!');
-            updateUI();
-        }
-
-        function joinBattle(id) {
-            let b = battles.find(x => x.id === id);
-            if(b) {
-                b.status = 'Running';
-                b.opponent = currentUser.name;
-                alert('Joined battle successfully!');
-                updateUI();
-            }
-        }
-
-        function adminDeclareWinner(index) {
-            if(confirm('Declare current user as winner?')) {
-                let prize = battles[index].amount * 2;
-                currentUser.winningChips += prize;
-                battles.splice(index, 1);
-                historyList.unshift({ type: 'Battle Win', amount: `+₹${prize}`, date: 'Just now', status: 'Success' });
-                alert('Winner declared and prize credited!');
-                updateUI();
-            }
-        }
-
-        updateUI();
-    </script>
+    function roomInfo() {
+      notify(
+        "गेम रूम सेवा अभी सेटअप नहीं हुई है। " +
+        "रूम कोड और मल्टीप्लेयर के लिए बैकएंड सर्वर आवश्यक है।"
+      );
+    }
+  </script>
 </body>
 </html>
